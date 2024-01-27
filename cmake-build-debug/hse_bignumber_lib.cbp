@@ -339,9 +339,6 @@
 		<Unit filename="/Users/quasarity/CLionProjects/hse-bignumber-lib/Google_tests/BigNumberTest.cpp">
 			<Option target="Google_Tests_run"/>
 		</Unit>
-		<Unit filename="/Users/quasarity/CLionProjects/hse-bignumber-lib/Google_tests/ConverterTests.cpp">
-			<Option target="Google_Tests_run"/>
-		</Unit>
 		<Unit filename="/Users/quasarity/CLionProjects/hse-bignumber-lib/Google_tests/lib/googlemock/src/gmock-all.cc">
 			<Option target="gmock"/>
 		</Unit>
