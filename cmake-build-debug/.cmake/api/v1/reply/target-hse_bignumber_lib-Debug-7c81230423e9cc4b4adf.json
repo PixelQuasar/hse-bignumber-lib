@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "libdemo_lib.a"
+			"path" : "libhse_bignumber_lib.a"
 		}
 	],
 	"backtrace" : 1,
@@ -50,13 +50,14 @@
 			},
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		}
 	],
-	"id" : "demo_lib::@6890427a1f51a3e7e1df",
-	"name" : "demo_lib",
-	"nameOnDisk" : "libdemo_lib.a",
+	"id" : "hse_bignumber_lib::@6890427a1f51a3e7e1df",
+	"name" : "hse_bignumber_lib",
+	"nameOnDisk" : "libhse_bignumber_lib.a",
 	"paths" : 
 	{
 		"build" : ".",
@@ -68,7 +69,15 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				2
 			]
 		}
 	],
@@ -79,6 +88,17 @@
 			"compileGroupIndex" : 0,
 			"path" : "library.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "BigNumber.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "BigNumber.h",
+			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "STATIC_LIBRARY"

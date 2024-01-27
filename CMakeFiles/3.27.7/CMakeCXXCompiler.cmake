@@ -28,6 +28,7 @@ set(CMAKE_RANLIB "/Library/Developer/CommandLineTools/usr/bin/ranlib")
 set(CMAKE_CXX_COMPILER_RANLIB "")
 set(CMAKE_LINKER "/Library/Developer/CommandLineTools/usr/bin/ld")
 set(CMAKE_MT "")
+set(CMAKE_TAPI "/Library/Developer/CommandLineTools/usr/bin/tapi")
 set(CMAKE_COMPILER_IS_GNUCXX )
 set(CMAKE_CXX_COMPILER_LOADED 1)
 set(CMAKE_CXX_COMPILER_WORKS TRUE)
@@ -36,7 +37,7 @@ set(CMAKE_CXX_ABI_COMPILED TRUE)
 set(CMAKE_CXX_COMPILER_ENV_VAR "CXX")
 
 set(CMAKE_CXX_COMPILER_ID_RUN 1)
-set(CMAKE_CXX_SOURCE_FILE_EXTENSIONS C;M;c++;cc;cpp;cxx;m;mm;mpp;CPP;ixx;cppm)
+set(CMAKE_CXX_SOURCE_FILE_EXTENSIONS C;M;c++;cc;cpp;cxx;m;mm;mpp;CPP;ixx;cppm;ccm;cxxm;c++m)
 set(CMAKE_CXX_IGNORE_EXTENSIONS inl;h;hpp;HPP;H;o;O;obj;OBJ;def;DEF;rc;RC)
 
 foreach (lang C OBJC OBJCXX)
@@ -49,6 +50,7 @@ endforeach()
 
 set(CMAKE_CXX_LINKER_PREFERENCE 30)
 set(CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES 1)
+set(CMAKE_CXX_LINKER_DEPFILE_SUPPORTED FALSE)
 
 # Save compiler ABI information.
 set(CMAKE_CXX_SIZEOF_DATA_PTR "8")
@@ -77,7 +79,7 @@ endif()
 
 
 
-set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "/usr/include;/Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include")
-set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
+set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "/Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/c++/v1;/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include;/Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include;/Library/Developer/CommandLineTools/usr/include")
+set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "c++")
 set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

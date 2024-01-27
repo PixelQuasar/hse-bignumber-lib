@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libhse_bignumber_lib.a CMakeFiles/hse_bignumber_lib.dir/library.cpp.o CMakeFiles/hse_bignumber_lib.dir/BigNumber.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libhse_bignumber_lib.a
