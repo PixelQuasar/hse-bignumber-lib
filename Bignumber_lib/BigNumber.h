@@ -26,6 +26,9 @@ class BigNumber {
     friend std::ostream& operator<< (std::ostream& stream, const BigNumber& matrix);
     friend BigNumber operator+(const BigNumber &, const BigNumber &);
 
+    // Debug methods
+    int getFirstChunk();
+
     //TODO: everything else
 };
 

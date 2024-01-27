@@ -85,6 +85,51 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"gmock\" \"gtest\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/quasarity/CLionProjects/hse-bignumber-lib/cmake-build-debug/CMakeFiles /Users/quasarity/CLionProjects/hse-bignumber-lib/cmake-build-debug//CMakeFiles/progress.marks
@@ -117,65 +162,119 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named hse_bignumber_lib
+# Target rules for targets named DateConverter_run
 
 # Build rule for target.
-hse_bignumber_lib: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 hse_bignumber_lib
-.PHONY : hse_bignumber_lib
+DateConverter_run: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 DateConverter_run
+.PHONY : DateConverter_run
 
 # fast build rule for target.
-hse_bignumber_lib/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/build
-.PHONY : hse_bignumber_lib/fast
+DateConverter_run/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DateConverter_run.dir/build.make CMakeFiles/DateConverter_run.dir/build
+.PHONY : DateConverter_run/fast
 
-BigNumber.o: BigNumber.cpp.o
-.PHONY : BigNumber.o
+#=============================================================================
+# Target rules for targets named Bignumber_lib
+
+# Build rule for target.
+Bignumber_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Bignumber_lib
+.PHONY : Bignumber_lib
+
+# fast build rule for target.
+Bignumber_lib/fast:
+	$(MAKE) $(MAKESILENT) -f Bignumber_lib/CMakeFiles/Bignumber_lib.dir/build.make Bignumber_lib/CMakeFiles/Bignumber_lib.dir/build
+.PHONY : Bignumber_lib/fast
+
+#=============================================================================
+# Target rules for targets named Google_Tests_run
+
+# Build rule for target.
+Google_Tests_run: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Google_Tests_run
+.PHONY : Google_Tests_run
+
+# fast build rule for target.
+Google_Tests_run/fast:
+	$(MAKE) $(MAKESILENT) -f Google_tests/CMakeFiles/Google_Tests_run.dir/build.make Google_tests/CMakeFiles/Google_Tests_run.dir/build
+.PHONY : Google_Tests_run/fast
+
+#=============================================================================
+# Target rules for targets named gmock
+
+# Build rule for target.
+gmock: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock
+.PHONY : gmock
+
+# fast build rule for target.
+gmock/fast:
+	$(MAKE) $(MAKESILENT) -f Google_tests/lib/googlemock/CMakeFiles/gmock.dir/build.make Google_tests/lib/googlemock/CMakeFiles/gmock.dir/build
+.PHONY : gmock/fast
+
+#=============================================================================
+# Target rules for targets named gmock_main
+
+# Build rule for target.
+gmock_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock_main
+.PHONY : gmock_main
+
+# fast build rule for target.
+gmock_main/fast:
+	$(MAKE) $(MAKESILENT) -f Google_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make Google_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build
+.PHONY : gmock_main/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) $(MAKESILENT) -f Google_tests/lib/googletest/CMakeFiles/gtest.dir/build.make Google_tests/lib/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) $(MAKESILENT) -f Google_tests/lib/googletest/CMakeFiles/gtest_main.dir/build.make Google_tests/lib/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
+
+main.o: main.cpp.o
+.PHONY : main.o
 
 # target to build an object file
-BigNumber.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/BigNumber.cpp.o
-.PHONY : BigNumber.cpp.o
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DateConverter_run.dir/build.make CMakeFiles/DateConverter_run.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-BigNumber.i: BigNumber.cpp.i
-.PHONY : BigNumber.i
-
-# target to preprocess a source file
-BigNumber.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/BigNumber.cpp.i
-.PHONY : BigNumber.cpp.i
-
-BigNumber.s: BigNumber.cpp.s
-.PHONY : BigNumber.s
-
-# target to generate assembly for a file
-BigNumber.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/BigNumber.cpp.s
-.PHONY : BigNumber.cpp.s
-
-library.o: library.cpp.o
-.PHONY : library.o
-
-# target to build an object file
-library.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/library.cpp.o
-.PHONY : library.cpp.o
-
-library.i: library.cpp.i
-.PHONY : library.i
+main.i: main.cpp.i
+.PHONY : main.i
 
 # target to preprocess a source file
-library.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/library.cpp.i
-.PHONY : library.cpp.i
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DateConverter_run.dir/build.make CMakeFiles/DateConverter_run.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-library.s: library.cpp.s
-.PHONY : library.s
+main.s: main.cpp.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-library.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hse_bignumber_lib.dir/build.make CMakeFiles/hse_bignumber_lib.dir/library.cpp.s
-.PHONY : library.cpp.s
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DateConverter_run.dir/build.make CMakeFiles/DateConverter_run.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -184,14 +283,21 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... hse_bignumber_lib"
-	@echo "... BigNumber.o"
-	@echo "... BigNumber.i"
-	@echo "... BigNumber.s"
-	@echo "... library.o"
-	@echo "... library.i"
-	@echo "... library.s"
+	@echo "... Bignumber_lib"
+	@echo "... DateConverter_run"
+	@echo "... Google_Tests_run"
+	@echo "... gmock"
+	@echo "... gmock_main"
+	@echo "... gtest"
+	@echo "... gtest_main"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

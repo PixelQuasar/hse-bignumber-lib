@@ -59,4 +59,9 @@ std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
     return stream;
 }
 
+// DEBUG METHORDS: REMOVE LATER
+int BigNumber::getFirstChunk() {
+    return payload[0];
+}
+
 //TODO: everything else
