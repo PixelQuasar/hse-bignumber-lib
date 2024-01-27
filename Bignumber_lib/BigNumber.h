@@ -23,13 +23,67 @@ class BigNumber {
         BigNumber(long long x);
         ~BigNumber();
 
-    friend std::ostream& operator<< (std::ostream& stream, const BigNumber& matrix);
-    friend BigNumber operator+(const BigNumber &, const BigNumber &);
+        // to write
+        friend std::ostream& operator<< (std::ostream& stream, const BigNumber& matrix);
 
-    // Debug methods
-    int getFirstChunk();
+        // to read
+        friend BigNumber operator>> (std::ostream& stream, const BigNumber& matrix);
 
-    //TODO: everything else
+        // sum
+        friend BigNumber operator+(const BigNumber& a, const BigNumber& b);
+
+        // diff
+        friend BigNumber operator-(const BigNumber& a, const BigNumber& b);
+
+        // mul
+        friend BigNumber operator*(const BigNumber& a, const BigNumber& b);
+
+        // div
+        friend BigNumber operator/(const BigNumber& a, const BigNumber& b);
+
+        // increment
+        friend BigNumber operator++(const BigNumber& a);
+
+        // decrement
+        friend BigNumber operator--(const BigNumber& a);
+
+        // is equals
+        friend bool operator==(const BigNumber& a, const BigNumber& b);
+
+        // is bigger than
+        friend bool operator>(const BigNumber& a, const BigNumber& b);
+
+        // is bigger or equals
+        friend bool operator>=(const BigNumber& a, const BigNumber& b);
+
+        // is lesser than
+        friend bool operator<(const BigNumber& a, const BigNumber& b);
+
+        // is lesser or equals
+        friend bool operator<=(const BigNumber& a, const BigNumber& b);
+
+        // is not equals
+        friend bool operator!=(const BigNumber& a, const BigNumber& b);
+
+        // Debug methods
+        int getFirstChunk();
+
+    private:
+        // binary operators
+        BigNumber sum(BigNumber a, BigNumber b);
+        BigNumber dif(BigNumber a, BigNumber b);
+        BigNumber mul(BigNumber a, BigNumber b);
+        BigNumber div(BigNumber a, BigNumber b);
+
+        // compare operators
+        bool compare(BigNumber a, BigNumber b);
+
+        // utils
+        std::string toString();
+
+        static BigNumber countPi(int accuracy);
+
+        //TODO: everything else
 };
 
 #endif //DEMO_LIB_BIGNUMBER_H
