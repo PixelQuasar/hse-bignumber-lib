@@ -1,4 +1,4 @@
-cd Google_tests/lib || exit
+cd Google_tests/lib || return
 git clone https://github.com/google/googletest
 cd ../../
 
