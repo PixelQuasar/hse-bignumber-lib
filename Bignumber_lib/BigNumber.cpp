@@ -3,6 +3,7 @@
 //
 
 #include <iomanip>
+#include "utils/trim.cpp"
 
 #include "BigNumber.h"
 
@@ -15,30 +16,62 @@ BigNumber::BigNumber() {
 
 // constructor with int
 BigNumber::BigNumber(int x) {
-    sign = false;
+    sign = x < 0;
     pointPosition = 0;
     payload.push_back(x);
 }
 
 // constructor with float
 BigNumber::BigNumber(float x) {
-    sign = false;
-    pointPosition = 0;
-    //TODO: float parsing implementation
+    BigNumber fromString = BigNumber(std::to_string(x));
+    payload = fromString.payload;
+    pointPosition = fromString.pointPosition;
+    sign = fromString.sign;
 }
 
 // constructor with double
 BigNumber::BigNumber(double x) {
-    sign = false;
-    pointPosition = 0;
-    //TODO: double parsing implementation
+    BigNumber fromString = BigNumber(std::to_string(x));
+    payload = fromString.payload;
+    pointPosition = fromString.pointPosition;
+    sign = fromString.sign;
 }
 
 // constructor with long long
 BigNumber::BigNumber(long long x) {
-    sign = false;
+    BigNumber fromString = BigNumber(std::to_string(x));
+    payload = fromString.payload;
+    pointPosition = fromString.pointPosition;
+    sign = fromString.sign;
+}
+
+BigNumber::BigNumber(std::string x) {
+    // trim
+    x = trim(x);
+
+    // get sign
+    if (x[0] == '-') {
+        sign = 1;
+        x = x.substr(1, x.length() - 1);
+    }
+
+    // get point position
     pointPosition = 0;
-    //TODO: long-long parsing implementation
+    for (int i = 0; i < x.length(); i++) {
+        if (x[i] == '.' || x[i] == ',') {
+            x.erase(i, 1);
+            pointPosition = i;
+            break;
+        }
+    }
+
+    for (int i = (int)x.length(); i > 0; i -= 9) {
+        if (i < 9) {
+            payload.push_back(atoi(x.substr(0, i).c_str()));
+        } else {
+            payload.push_back(atoi(x.substr(i - 9, 9).c_str()));
+        }
+    }
 }
 
 // destructor
@@ -124,9 +157,32 @@ bool operator!=(const BigNumber& a, const BigNumber& b) {
 
 };
 
+BigNumber &BigNumber::operator=(const BigNumber &) {
+
+}
+
 // DEBUG METHODS: REMOVE LATER
 int BigNumber::getFirstChunk() {
     return payload[0];
+}
+
+std::string BigNumber::debug() {
+    std::string result = "Payload array: ";
+    for (int item : payload) {
+        result += std::to_string(item) + " ";
+    }
+    result += "\nPoint position: " + std::to_string(pointPosition) + "\nSign: " + (sign ? "-" : "+");
+    return result;
+
+}
+
+// utils
+std::string BigNumber::toString() {
+
+}
+
+BigNumber BigNumber::removeStartZeros() {
+
 }
 
 //TODO: everything else

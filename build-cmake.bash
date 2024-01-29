@@ -7,6 +7,3 @@ cd cmake-build || exit
 cmake ..
 cd ../
 cmake --build ./cmake-build
-
-
-

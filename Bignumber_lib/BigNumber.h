@@ -21,6 +21,7 @@ class BigNumber {
         BigNumber(double x);
         BigNumber(float x);
         BigNumber(long long x);
+        BigNumber(std::string x);
         ~BigNumber();
 
         // to write
@@ -65,8 +66,13 @@ class BigNumber {
         // is not equals
         friend bool operator!=(const BigNumber& a, const BigNumber& b);
 
+        //assignment
+        BigNumber &operator=(const BigNumber &);
+
         // Debug methods
         int getFirstChunk();
+
+        std::string debug();
 
     private:
         // binary operators
@@ -80,6 +86,7 @@ class BigNumber {
 
         // utils
         std::string toString();
+        BigNumber removeStartZeros();
 
         static BigNumber countPi(int accuracy);
 
