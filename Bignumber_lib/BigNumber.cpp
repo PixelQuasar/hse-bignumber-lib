@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iomanip>
 #include "utils/trim.cpp"
-
 #include "BigNumber.h"
 
 // constructor with void
@@ -116,12 +115,12 @@ std::istream& operator>> (std::istream& stream, BigNumber& bigNumber) {
 }
 // sum
 BigNumber operator+(const BigNumber& a, const BigNumber& b) {
-
+    return BigNumber::sum(a, b);
 };
 
 // diff
 BigNumber operator-(const BigNumber& a, const BigNumber& b) {
-
+    return BigNumber::dif(a, b);
 };
 
 // mul
@@ -194,13 +193,20 @@ std::string BigNumber::debug() {
     }
     result += "\nPoint position: " + std::to_string(pointPosition) + "\nSign: " + (sign ? "-" : "+");
     return result;
-
 }
 
 // private
 // binary operators
 BigNumber BigNumber::sum(BigNumber a, BigNumber b) {
-    BigNumber result = BigNumber::buildEmpty();
+    if (a.sign && !b.sign) {
+        return dif(b, a);
+    }
+    if (b.sign && !a.sign) {
+        return dif(a, b);
+    }
+
+    BigNumber result;
+    result.pointPosition = 0;
     int reminder = 0;
     for (size_t i = 0; i < std::max(a.payload.size(), b.payload.size()); i++) {
         uint32_t chunkSum = a.payload[i] + b.payload[i];
@@ -211,20 +217,43 @@ BigNumber BigNumber::sum(BigNumber a, BigNumber b) {
         }
         result.payload.push_back(chunkSum);
     }
+
+    if (a.sign) result.sign = true;
+    result.pointPosition = 0;
     return result;
 }
 
 BigNumber BigNumber::dif(BigNumber a, BigNumber b) {
     int carry = 0;
-    BigNumber result = a;
-    for (size_t i = 0; i < b.payload.size() || carry; ++i) {
-        result.payload[i] -= carry + (i < b.payload.size() ? b.payload[i] : 0);
+    BigNumber result, subtrahend;
+
+    if (a > b) {
+        result = a;
+        subtrahend = b;
+        result.sign = false;
+    }
+    else if (a < b) {
+        result = b;
+        subtrahend = a;
+        result.sign = true;
+    }
+    else {
+        result.payload.push_back(0);
+        result.sign = false;
+        return result;
+    }
+
+    for (size_t i = 0; i < subtrahend.payload.size() || carry; ++i) {
+        result.payload[i] -= carry + (i < subtrahend.payload.size() ? subtrahend.payload[i] : 0);
         carry = result.payload[i] < 0;
         if (carry) result.payload[i] += base;
     }
+
     while (result.payload.size() > 1 && result.payload.back() == 0) {
         result.payload.pop_back();
     }
+
+    result.pointPosition = 0;
     return result;
 }
 

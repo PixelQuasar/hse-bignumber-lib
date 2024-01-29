@@ -16,12 +16,13 @@ class BigNumber {
     bool sign;
 
     public:
+        // constructors and destructors
         BigNumber();
-        BigNumber(int x);
-        BigNumber(double x);
-        BigNumber(float x);
-        BigNumber(long long x);
-        BigNumber(std::string x);
+        explicit BigNumber(int x);
+        explicit BigNumber(double x);
+        explicit BigNumber(float x);
+        explicit BigNumber(long long x);
+        explicit BigNumber(std::string x);
         ~BigNumber();
 
         // to write
