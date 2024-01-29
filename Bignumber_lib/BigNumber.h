@@ -11,7 +11,7 @@ class BigNumber {
     static const int base = 1e9;
     static const int baseLen = 9;
 
-    std::vector<int> payload;
+    std::vector<uint32_t> payload;
     int pointPosition;
     bool sign;
 
@@ -70,23 +70,24 @@ class BigNumber {
         BigNumber &operator=(const BigNumber& bigNumber);
 
         // Debug methods
-        int getFirstChunk();
+        uint32_t getFirstChunk();
 
         std::string debug();
 
     private:
         // binary operators
-        BigNumber sum(BigNumber a, BigNumber b);
-        BigNumber dif(BigNumber a, BigNumber b);
-        BigNumber mul(BigNumber a, BigNumber b);
-        BigNumber div(BigNumber a, BigNumber b);
+        static BigNumber sum(BigNumber a, BigNumber b);
+        static BigNumber dif(BigNumber a, BigNumber b);
+        static BigNumber mul(BigNumber a, BigNumber b);
+        static BigNumber div(BigNumber a, BigNumber b);
 
         // compare operators
-        bool compare(BigNumber a, BigNumber b);
+        static int compare(BigNumber a, BigNumber b);
 
         // utils
         std::string toString();
         BigNumber removeStartZeros();
+        static BigNumber buildEmpty();
 
         static BigNumber countPi(int accuracy);
 

@@ -6,8 +6,7 @@
 
 int main()
 {
-    BigNumber x = BigNumber();
-    std::cin >> x;
+    BigNumber x = BigNumber(45.45);
     BigNumber y = x;
     std::cout << x.debug() << std::endl << y.debug() << std::endl;
 
