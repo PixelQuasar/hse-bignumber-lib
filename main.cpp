@@ -6,9 +6,9 @@
 
 int main()
 {
-    BigNumber x = BigNumber(45.45);
-    BigNumber y = x;
-    std::cout << x.debug() << std::endl << y.debug() << std::endl;
+    BigNumber x = BigNumber("10000000000000000000000000000000");
+    BigNumber y = BigNumber("1");
+    std::cout << (-x  + (-y)) << std::endl;
 
     return 0;
 }

@@ -4,14 +4,14 @@
 
 #include <iostream>
 #include <iomanip>
-#include "utils/trim.cpp"
 #include "BigNumber.h"
+#include "utils/trim.cpp"
+#include "utils/completeWithZeros.cpp"
 
 // constructor with void
 BigNumber::BigNumber() {
     sign = false;
     pointPosition = 0;
-    payload.push_back(0);
 }
 
 // constructor with int
@@ -41,7 +41,7 @@ BigNumber::BigNumber(long long x) {
 
 BigNumber::BigNumber(std::string x) {
     // trim and erase zeros
-    x.erase ( x.find_last_not_of('0') + 1, std::string::npos );
+    //x.erase ( x.find_last_not_of('0') + 1, std::string::npos );
     x.erase ( x.find_last_not_of('.') + 1, std::string::npos );
     x = trim(x);
 
@@ -49,8 +49,10 @@ BigNumber::BigNumber(std::string x) {
 
     // get sign
     if (x[0] == '-') {
-        sign = 1;
+        sign = true;
         x = x.substr(1, x.length() - 1);
+    } else {
+        sign = false;
     }
 
     // get point position
@@ -79,27 +81,28 @@ BigNumber::~BigNumber() {
 
 // utils
 std::string BigNumber::toString() {
-
+    std::string result = "";
+    if (sign) result += "-";
+    result += std::to_string(payload.back());
+    for (int i = (int)payload.size() - 2; i >= 0; i--) {
+        result += completeWithZeros(&payload[i], BigNumber::baseLen);
+    }
+    return result;
 }
 
 BigNumber BigNumber::removeStartZeros() {
 
 }
 
-static BigNumber BigNumber::buildEmpty() {
-    BigNumber result = BigNumber();
-    result.payload.pop_back();
-    return result;
-}
-
 // to write
 std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
+    if (bigNumber.sign) stream << "-";
     stream << bigNumber.payload.back();
-    for (int i = (int)bigNumber.payload.size() - 2; i >= 0; --i) {
+    for (int i = (int)bigNumber.payload.size() - 2; i >= 0; i--) {
         stream <<
-            std::setfill('0') <<
-            std::setw(BigNumber::baseLen) <<
-            bigNumber.payload[i];
+               std::setfill('0') <<
+               std::setw(BigNumber::baseLen) <<
+               bigNumber.payload[i];
     }
 
     return stream;
@@ -109,10 +112,19 @@ std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
 std::istream& operator>> (std::istream& stream, BigNumber& bigNumber) {
     std::string temp;
     stream >> temp;
-    std::cout << temp << std::endl;
     bigNumber = BigNumber(temp);
     return stream;
 }
+
+// unary minus
+BigNumber operator-(const BigNumber& x) {
+    BigNumber result;
+    result.payload = x.payload;
+    result.sign = !result.sign;
+    result.payload = x.payload;
+    return result;
+}
+
 // sum
 BigNumber operator+(const BigNumber& a, const BigNumber& b) {
     return BigNumber::sum(a, b);
@@ -150,22 +162,22 @@ bool operator==(const BigNumber& a, const BigNumber& b) {
 
 // is bigger than
 bool operator>(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::compare(a, b) == 1;
+    return BigNumber::compare(a, b) == -1;
 };
 
 // is bigger or equals
 bool operator>=(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::compare(a, b) != -1;
+    return BigNumber::compare(a, b) != 1;
 };
 
 // is lesser than
 bool operator<(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::compare(a, b) == -1;
+    return BigNumber::compare(a, b) == 1;
 };
 
 // is lesser or equals
 bool operator<=(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::compare(a, b) != 1;
+    return BigNumber::compare(a, b) != -1;
 };
 
 // is not equals
@@ -187,9 +199,9 @@ uint32_t BigNumber::getFirstChunk() {
 }
 
 std::string BigNumber::debug() {
-    std::string result = "Payload array: ";
+    std::string result = "\nPayload array:\n";
     for (uint32_t item : payload) {
-        result += std::to_string(item) + " ";
+        result += completeWithZeros(&item, BigNumber::baseLen) + " ";
     }
     result += "\nPoint position: " + std::to_string(pointPosition) + "\nSign: " + (sign ? "-" : "+");
     return result;
@@ -201,6 +213,7 @@ BigNumber BigNumber::sum(BigNumber a, BigNumber b) {
     if (a.sign && !b.sign) {
         return dif(b, a);
     }
+
     if (b.sign && !a.sign) {
         return dif(a, b);
     }
@@ -225,16 +238,13 @@ BigNumber BigNumber::sum(BigNumber a, BigNumber b) {
 
 BigNumber BigNumber::dif(BigNumber a, BigNumber b) {
     int carry = 0;
-    BigNumber result, subtrahend;
+    BigNumber result;
 
     if (a > b) {
-        result = a;
-        subtrahend = b;
         result.sign = false;
     }
     else if (a < b) {
-        result = b;
-        subtrahend = a;
+        std::swap(a, b);
         result.sign = true;
     }
     else {
@@ -243,14 +253,20 @@ BigNumber BigNumber::dif(BigNumber a, BigNumber b) {
         return result;
     }
 
-    for (size_t i = 0; i < subtrahend.payload.size() || carry; ++i) {
-        result.payload[i] -= carry + (i < subtrahend.payload.size() ? subtrahend.payload[i] : 0);
-        carry = result.payload[i] < 0;
-        if (carry) result.payload[i] += base;
+    for (int i = 0; i <= a.payload.size() - b.payload.size() + 1; i++) {
+        b.payload.push_back(0);
     }
 
-    while (result.payload.size() > 1 && result.payload.back() == 0) {
-        result.payload.pop_back();
+    for (int i = 0; i < a.payload.size(); i++) {
+        u_int32_t diff = BigNumber::base + a.payload[i] - b.payload[i] - carry;
+        carry = 0;
+        if (diff > BigNumber::base) {
+            diff -= BigNumber::base;
+        }
+        else {
+            carry = 1;
+        }
+        result.payload.push_back(diff);
     }
 
     result.pointPosition = 0;
@@ -265,6 +281,10 @@ BigNumber BigNumber::div(BigNumber a, BigNumber b) {
 
 }
 
+BigNumber BigNumber::negate() {
+    sign = -sign;
+}
+
 // compare operators
 int BigNumber::compare(BigNumber a, BigNumber b) {
     // a > b: -1
@@ -272,11 +292,19 @@ int BigNumber::compare(BigNumber a, BigNumber b) {
     // a = b: 0
     if ((a.sign == 1 && b.sign == 0) || a.payload.size() < b.payload.size()) return 1;
     if ((a.sign == 0 && b.sign == 1) || a.payload.size() > b.payload.size()) return -1;
-    for (size_t i = a.payload.size() - 1; i <= 0; i--) {
-        if (a.payload[i] < b.payload[i]) return 1;
-        if (b.payload[i] > a.payload[i]) return -1;
+    for (size_t i = a.payload.size() - 1; i >= 0; i--) {
+        if (a.payload[i] < b.payload[i]) return a.sign ? -1 : 1;
+        if (b.payload[i] > a.payload[i]) return a.sign ? 1 : -1;
     }
     return 0;
+}
+
+BigNumber BigNumber::copy() const {
+    BigNumber newBigNumber;
+    newBigNumber.payload = payload;
+    newBigNumber.sign = sign;
+    newBigNumber.pointPosition = pointPosition;
+    return newBigNumber;
 }
 
 BigNumber BigNumber::countPi(int accuracy) {

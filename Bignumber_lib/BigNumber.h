@@ -31,6 +31,9 @@ class BigNumber {
         // to read
         friend std::istream& operator>> (std::istream& stream, BigNumber& bigNumber);
 
+        // change the sign
+        friend BigNumber operator-(const BigNumber& x);
+
         // sum
         friend BigNumber operator+(const BigNumber& a, const BigNumber& b);
 
@@ -70,6 +73,9 @@ class BigNumber {
         //assignment
         BigNumber &operator=(const BigNumber& bigNumber);
 
+        // copy
+        BigNumber copy() const;
+
         // Debug methods
         uint32_t getFirstChunk();
 
@@ -81,6 +87,7 @@ class BigNumber {
         static BigNumber dif(BigNumber a, BigNumber b);
         static BigNumber mul(BigNumber a, BigNumber b);
         static BigNumber div(BigNumber a, BigNumber b);
+        BigNumber negate();
 
         // compare operators
         static int compare(BigNumber a, BigNumber b);
@@ -88,7 +95,6 @@ class BigNumber {
         // utils
         std::string toString();
         BigNumber removeStartZeros();
-        static BigNumber buildEmpty();
 
         static BigNumber countPi(int accuracy);
 
