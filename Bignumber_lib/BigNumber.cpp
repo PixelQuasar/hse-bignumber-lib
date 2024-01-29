@@ -2,6 +2,7 @@
 // Created by QUASARITY on 27.01.2024 with love.
 //
 
+#include <iostream>
 #include <iomanip>
 #include "utils/trim.cpp"
 
@@ -93,10 +94,13 @@ std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
 }
 
 // to read
-BigNumber operator>> (std::ostream& stream, const BigNumber& matrix) {
-
-};
-
+std::istream& operator>> (std::istream& stream, BigNumber& bigNumber) {
+    std::string temp;
+    stream >> temp;
+    std::cout << temp << std::endl;
+    bigNumber = BigNumber(temp);
+    return stream;
+}
 // sum
 BigNumber operator+(const BigNumber& a, const BigNumber& b) {
 
@@ -157,8 +161,12 @@ bool operator!=(const BigNumber& a, const BigNumber& b) {
 
 };
 
-BigNumber &BigNumber::operator=(const BigNumber &) {
+BigNumber& BigNumber::operator=(const BigNumber& bigNumber) {
+    payload = bigNumber.payload;
+    pointPosition = bigNumber.pointPosition;
+    sign = bigNumber.sign;
 
+    return *this;
 }
 
 // DEBUG METHODS: REMOVE LATER

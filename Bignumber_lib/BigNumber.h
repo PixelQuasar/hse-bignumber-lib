@@ -25,10 +25,10 @@ class BigNumber {
         ~BigNumber();
 
         // to write
-        friend std::ostream& operator<< (std::ostream& stream, const BigNumber& matrix);
+        friend std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber);
 
         // to read
-        friend BigNumber operator>> (std::ostream& stream, const BigNumber& matrix);
+        friend std::istream& operator>> (std::istream& stream, BigNumber& bigNumber);
 
         // sum
         friend BigNumber operator+(const BigNumber& a, const BigNumber& b);
@@ -67,7 +67,7 @@ class BigNumber {
         friend bool operator!=(const BigNumber& a, const BigNumber& b);
 
         //assignment
-        BigNumber &operator=(const BigNumber &);
+        BigNumber &operator=(const BigNumber& bigNumber);
 
         // Debug methods
         int getFirstChunk();

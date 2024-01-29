@@ -6,8 +6,10 @@
 
 int main()
 {
-    BigNumber x = BigNumber("   -123.456   ");
-    std::cout << x.debug() << std::endl;
+    BigNumber x = BigNumber();
+    std::cin >> x;
+    BigNumber y = x;
+    std::cout << x.debug() << std::endl << y.debug() << std::endl;
 
     return 0;
 }
