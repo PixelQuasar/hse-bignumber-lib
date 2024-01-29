@@ -244,8 +244,8 @@ int BigNumber::compare(BigNumber a, BigNumber b) {
     if ((a.sign == 1 && b.sign == 0) || a.payload.size() < b.payload.size()) return 1;
     if ((a.sign == 0 && b.sign == 1) || a.payload.size() > b.payload.size()) return -1;
     for (size_t i = a.payload.size() - 1; i <= 0; i--) {
-        if (a < b) return 1;
-        if (b > a) return -1;
+        if (a.payload[i] < b.payload[i]) return 1;
+        if (b.payload[i] > a.payload[i]) return -1;
     }
     return 0;
 }
