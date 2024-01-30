@@ -8,7 +8,11 @@ int main()
 {
     BigNumber x = BigNumber("10000000000000000000000000000000");
     BigNumber y = BigNumber("1");
-    std::cout << (-x  + (-y)) << std::endl;
+    std::cout << (-y + x) << std::endl;
+
+    for (BigNumber i = 0; i < 10; i++) {
+        std::cout << i << std::endl;
+    }
 
     return 0;
 }

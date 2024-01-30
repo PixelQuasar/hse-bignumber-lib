@@ -10,84 +10,72 @@
 class BigNumber {
     static const int base = 1e9;
     static const int baseLen = 9;
-
-    std::vector<uint32_t> payload;
     int pointPosition;
     bool sign;
+    std::vector<uint32_t> payload;
 
-    public:
+public:
         // constructors and destructors
         BigNumber();
-        explicit BigNumber(int x);
-        explicit BigNumber(double x);
-        explicit BigNumber(float x);
-        explicit BigNumber(long long x);
-        explicit BigNumber(std::string x);
+        BigNumber(int x);
+        BigNumber(double x);
+        BigNumber(float x);
+        BigNumber(long long x);
+        BigNumber(std::string x);
+        BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
         ~BigNumber();
 
-        // to write
         friend std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber);
-
-        // to read
         friend std::istream& operator>> (std::istream& stream, BigNumber& bigNumber);
 
-        // change the sign
-        friend BigNumber operator-(const BigNumber& x);
-
-        // sum
+        // binary
         friend BigNumber operator+(const BigNumber& a, const BigNumber& b);
-
-        // diff
         friend BigNumber operator-(const BigNumber& a, const BigNumber& b);
-
-        // mul
         friend BigNumber operator*(const BigNumber& a, const BigNumber& b);
-
-        // div
         friend BigNumber operator/(const BigNumber& a, const BigNumber& b);
 
-        // increment
-        friend BigNumber operator++(const BigNumber& a);
+        friend bool operator==(const BigNumber& a, const int& b);
+        friend bool operator>(const BigNumber& a, const int& b);
+        friend bool operator>=(const BigNumber& a, const int& b);
+        friend bool operator<(const BigNumber& a, const int& b);
+        friend bool operator<=(const BigNumber& a, const int& b);
+        friend bool operator!=(const BigNumber& a, const int& b);
 
-        // decrement
-        friend BigNumber operator--(const BigNumber& a);
-
-        // is equals
         friend bool operator==(const BigNumber& a, const BigNumber& b);
-
-        // is bigger than
         friend bool operator>(const BigNumber& a, const BigNumber& b);
-
-        // is bigger or equals
         friend bool operator>=(const BigNumber& a, const BigNumber& b);
-
-        // is lesser than
         friend bool operator<(const BigNumber& a, const BigNumber& b);
-
-        // is lesser or equals
         friend bool operator<=(const BigNumber& a, const BigNumber& b);
-
-        // is not equals
         friend bool operator!=(const BigNumber& a, const BigNumber& b);
 
+        // unary
+        friend BigNumber operator-(const BigNumber& x);
+        BigNumber operator++(int);
+        BigNumber operator--(int);
+
         //assignment
-        BigNumber &operator=(const BigNumber& bigNumber);
+        BigNumber &operator=(const BigNumber& a);
+        BigNumber &operator=(const int& a);
+        BigNumber &operator+=(const BigNumber& a);
+        BigNumber &operator-=(const BigNumber& a);
+        BigNumber &operator*=(const BigNumber& a);
+        BigNumber &operator/=(const BigNumber& a);
 
         // copy
         BigNumber copy() const;
 
         // Debug methods
         uint32_t getFirstChunk();
-
         std::string debug();
 
     private:
         // binary operators
-        static BigNumber sum(BigNumber a, BigNumber b);
-        static BigNumber dif(BigNumber a, BigNumber b);
+        static BigNumber add(BigNumber a, BigNumber b);
+        static BigNumber sub(BigNumber a, BigNumber b);
         static BigNumber mul(BigNumber a, BigNumber b);
         static BigNumber div(BigNumber a, BigNumber b);
-        BigNumber negate();
+        BigNumber increment();
+        BigNumber decrement();
 
         // compare operators
         static int compare(BigNumber a, BigNumber b);
