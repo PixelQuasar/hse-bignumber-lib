@@ -68,7 +68,7 @@ BigNumber::BigNumber(std::string x) {
         }
     }
 
-    for (int i = (int)x.length(); i > 0; i -= 9) {
+    for (int i = x.length(); i > 0; i -= 9) {
         if (i < 9) {
             payload.push_back(atoi(x.substr(0, i).c_str()));
         } else {
@@ -87,7 +87,7 @@ std::string BigNumber::toString() {
     std::string result = "";
     if (sign) result += "-";
     result += std::to_string(payload.back());
-    for (int i = (int)payload.size() - 2; i >= 0; i--) {
+    for (int i = payload.size() - 2; i >= 0; i--) {
         result += completeWithZeros(&payload[i], BigNumber::baseLen);
     }
     return result;
@@ -101,7 +101,7 @@ BigNumber BigNumber::removeStartZeros() {
 std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
     if (bigNumber.sign) stream << "-";
     stream << bigNumber.payload.back();
-    for (int i = (int)bigNumber.payload.size() - 2; i >= 0; i--) {
+    for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
         stream <<
                std::setfill('0') <<
                std::setw(BigNumber::baseLen) <<
@@ -209,6 +209,7 @@ bool operator<(const BigNumber& a, const int& b) {
 
 bool operator<=(const BigNumber& a, const int& b) {
     // TODO: optimize pater
+    std::cout << "---" << BigNumber::compare(a, b) << std::endl;
     return a <= BigNumber(b);
 };
 
@@ -254,7 +255,7 @@ int BigNumber::compare(BigNumber a, BigNumber b) {
     // a = b: 0
     if ((a.sign == 1 && b.sign == 0) || a.payload.size() < b.payload.size()) return 1;
     if ((a.sign == 0 && b.sign == 1) || a.payload.size() > b.payload.size()) return -1;
-    for (int i = (int)a.payload.size() - 1; i >= 0; i--) {
+    for (int i = a.payload.size() - 1; i >= 0; i--) {
         if (a.payload[i] < b.payload[i]) return a.sign ? -1 : 1;
         if (b.payload[i] > a.payload[i]) return a.sign ? 1 : -1;
     }

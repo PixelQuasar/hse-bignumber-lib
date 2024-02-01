@@ -10,7 +10,7 @@ int main()
     BigNumber y = BigNumber("1");
     std::cout << (-y + x) << std::endl;
 
-    for (BigNumber i = 0; i < 10; i++) {
+    for (BigNumber i = -10; i <= 10; i+=(BigNumber(-1))) {
         std::cout << i << std::endl;
     }
 
