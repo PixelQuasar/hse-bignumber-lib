@@ -9,8 +9,8 @@ BigNumber BigNumber::mul(BigNumber a, BigNumber b) {
     c.sign = a.sign ^ b.sign;
     c.pointPosition = a.pointPosition + b.pointPosition;
 
-    for (size_t i = 0; i<a.payload.size(); ++i) {
-        for (int j = 0, carry = 0; j < (int) b.payload.size() || carry; ++j) {
+    for (size_t i = 0; i < a.payload.size(); ++i) {
+        for (int j = 0, carry = 0; j < (int) b.payload.size() || carry; j++) {
             long long cur = c.payload[i + j] + a.payload[i] * 1ll * (j < (int) b.payload.size() ? b.payload[j] : 0) + carry;
             c.payload[i + j] = int(cur % base);
             carry = int(cur / base);

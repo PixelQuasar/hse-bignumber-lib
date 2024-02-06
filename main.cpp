@@ -4,8 +4,7 @@
 #include <iostream>
 #include "BigNumber.h"
 
-int main()
-{
+int main() {
     BigNumber x = 123;
     BigNumber y = 456;
     std::cout << (x * y) << std::endl;

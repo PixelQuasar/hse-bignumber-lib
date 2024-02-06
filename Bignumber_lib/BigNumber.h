@@ -65,6 +65,9 @@ public:
         // copy
         BigNumber copy() const;
 
+        // get digits number
+        size_t digitLen();
+
         // Debug methods
         uint32_t getFirstChunk();
         std::string debug();

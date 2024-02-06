@@ -278,6 +278,18 @@ BigNumber BigNumber::copy() const {
     return newBigNumber;
 }
 
+size_t BigNumber::digitLen() {
+    size_t result = (payload.size() - 1) * 9;
+    uint32_t lastBlock = payload[payload.size() - 1];
+
+    while (lastBlock > 0) {
+        result++;
+        lastBlock /= 10;
+    }
+
+    return result;
+}
+
 BigNumber BigNumber::countPi(int accuracy) {
 
 }
