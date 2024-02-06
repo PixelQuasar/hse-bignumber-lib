@@ -1,3 +1,6 @@
+//
+// Created by QUASARITY on 30.01.2024.
+//
 #include "BigNumber.h"
 
 BigNumber BigNumber::sub(BigNumber a, BigNumber b) {

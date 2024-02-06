@@ -17,6 +17,7 @@ class BigNumber {
 public:
         // constructors and destructors
         BigNumber();
+        BigNumber(size_t n, uint32_t x);
         BigNumber(int x);
         BigNumber(double x);
         BigNumber(float x);

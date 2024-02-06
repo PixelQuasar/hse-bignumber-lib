@@ -14,6 +14,13 @@ BigNumber::BigNumber() {
     pointPosition = 0;
 }
 
+// set vector of n
+BigNumber::BigNumber(size_t n, uint32_t x) {
+    sign = false;
+    pointPosition = 0;
+    payload = std::vector<u_int32_t>(n, x);
+}
+
 // constructor with int
 BigNumber::BigNumber(int x) {
     BigNumber fromString = BigNumber(std::to_string(x));
@@ -123,7 +130,7 @@ std::istream& operator>> (std::istream& stream, BigNumber& bigNumber) {
 BigNumber operator-(const BigNumber& x) {
     BigNumber result;
     result.payload = x.payload;
-    result.sign = !result.sign;
+    result.sign = !x.sign;
     result.payload = x.payload;
     return result;
 }
@@ -179,6 +186,7 @@ bool operator<(const BigNumber& a, const BigNumber& b) {
 };
 
 bool operator<=(const BigNumber& a, const BigNumber& b) {
+
     return BigNumber::compare(a, b) != -1;
 };
 
@@ -209,7 +217,6 @@ bool operator<(const BigNumber& a, const int& b) {
 
 bool operator<=(const BigNumber& a, const int& b) {
     // TODO: optimize pater
-    std::cout << "---" << BigNumber::compare(a, b) << std::endl;
     return a <= BigNumber(b);
 };
 
@@ -257,7 +264,7 @@ int BigNumber::compare(BigNumber a, BigNumber b) {
     if ((a.sign == 0 && b.sign == 1) || a.payload.size() > b.payload.size()) return -1;
     for (int i = a.payload.size() - 1; i >= 0; i--) {
         if (a.payload[i] < b.payload[i]) return a.sign ? -1 : 1;
-        if (b.payload[i] > a.payload[i]) return a.sign ? 1 : -1;
+        if (a.payload[i] > b.payload[i]) return a.sign ? 1 : -1;
     }
     return 0;
 }

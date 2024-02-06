@@ -5,7 +5,7 @@
 
 BigNumber BigNumber::add(const BigNumber a, const BigNumber b) {
     if (a.sign && !b.sign) {
-        return sub(b, a);
+        return sub(b, -a);
     }
 
     if (b.sign && !a.sign) {

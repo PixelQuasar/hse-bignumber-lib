@@ -6,13 +6,9 @@
 
 int main()
 {
-    BigNumber x = BigNumber("10000000000000000000000000000000");
-    BigNumber y = BigNumber("1");
-    std::cout << (-y + x) << std::endl;
-
-    for (BigNumber i = -10; i <= 10; i+=(BigNumber(-1))) {
-        std::cout << i << std::endl;
-    }
+    BigNumber x = 123;
+    BigNumber y = 456;
+    std::cout << (x * y) << std::endl;
 
     return 0;
 }
