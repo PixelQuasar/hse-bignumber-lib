@@ -3,7 +3,7 @@
 //
 #include "BigNumber.h"
 
-BigNumber BigNumber::add(const BigNumber a, const BigNumber b) {
+BigNumber BigNumber::add(BigNumber a, BigNumber b) {
     if (a.sign && !b.sign) {
         return sub(b, -a);
     }

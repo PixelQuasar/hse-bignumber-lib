@@ -256,7 +256,7 @@ std::string BigNumber::debug() {
 
 // private
 // compare operators
-int BigNumber::compare(BigNumber a, BigNumber b) {
+int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
     // a > b: -1
     // a < b: 1
     // a = b: 0
@@ -290,9 +290,30 @@ size_t BigNumber::digitLen() {
     return result;
 }
 
+
+
+BigNumber BigNumber::removeZeros() {
+    size_t redundantZeros = 0;
+    std::vector<uint32_t> tempPayload = payload;
+
+    for (int i = 0; i < tempPayload.size(); i++) {
+        while (tempPayload[i] % 10 == 0) {
+            tempPayload[i] /= 10;
+            redundantZeros++;
+        }
+    }
+
+    // TODO: shift for redundant zeros
+}
+
+BigNumber BigNumber::shift(size_t numberOfZeros) {
+    // TODO: shift implementation
+}
+
 BigNumber BigNumber::countPi(int accuracy) {
 
 }
+
 
 
 

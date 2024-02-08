@@ -10,6 +10,7 @@
 class BigNumber {
     static const int base = 1e9;
     static const int baseLen = 9;
+    static const int divisionAccuracy = baseLen * 2;
     int pointPosition;
     bool sign;
     std::vector<uint32_t> payload;
@@ -74,15 +75,18 @@ public:
 
     private:
         // binary operators
-        static BigNumber add(BigNumber a, BigNumber b);
-        static BigNumber sub(BigNumber a, BigNumber b);
-        static BigNumber mul(BigNumber a, BigNumber b);
-        static BigNumber div(BigNumber a, BigNumber b);
+        static BigNumber add( BigNumber a, BigNumber b);
+        static BigNumber sub( BigNumber a, BigNumber b);
+        static BigNumber mul( BigNumber a, BigNumber b);
+        static BigNumber div( BigNumber a, BigNumber b);
         BigNumber increment();
         BigNumber decrement();
 
+        BigNumber removeZeros();
+        BigNumber shift(size_t numberOfZeros);
+
         // compare operators
-        static int compare(BigNumber a, BigNumber b);
+        static int compare(const BigNumber& a, const BigNumber& b);
 
         // utils
         std::string toString();

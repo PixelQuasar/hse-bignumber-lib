@@ -5,9 +5,9 @@
 #include "BigNumber.h"
 
 int main() {
-    BigNumber x = 123;
-    BigNumber y = 456;
-    std::cout << (x * y) << std::endl;
+    BigNumber x = 10000;
+    BigNumber y = 3;
+    std::cout << (x / y) << std::endl;
 
     return 0;
 }
