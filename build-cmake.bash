@@ -5,5 +5,4 @@ cd ../../
 mkdir cmake-build
 cd cmake-build || exit
 cmake ..
-cd ../
-cmake --build ./cmake-build
+cmake --build ../cmake-build

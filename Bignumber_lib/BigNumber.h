@@ -20,8 +20,6 @@ class BigNumber {
         // constructors and destructors
         BigNumber();
 
-        BigNumber(size_t n, uint32_t x);
-
         BigNumber(int x);
 
         BigNumber(double x);
@@ -32,7 +30,7 @@ class BigNumber {
 
         BigNumber(std::string x);
 
-        BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
+        BigNumber(BigNumber& x);
 
         ~BigNumber();
 
@@ -105,6 +103,9 @@ class BigNumber {
         std::string debug();
 
     private:
+        BigNumber(size_t n, uint32_t x);
+
+        BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
         // binary operators
         static BigNumber add(BigNumber a, BigNumber b);
 
