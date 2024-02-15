@@ -103,13 +103,14 @@ BigNumber::~BigNumber() {
 }
 
 // utils
-std::string BigNumber::toString() {
+std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
     std::string result;
-    if (sign) result += "-";
-    result += std::to_string(payload.back());
-    for (int i = payload.size() - 2; i >= 0; i--) {
-        result += completeWithZeros(&payload[i], BigNumber::baseLen);
+    if (bigNumber.sign) result += "-";
+    result += std::to_string(bigNumber.payload.back());
+    for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
+        result += completeWithZeros(bigNumber.payload[i], BigNumber::baseLen);
     }
+    result.insert(bigNumber.pointPosition, 1, '.');
     return result;
 }
 
@@ -124,16 +125,9 @@ BigNumber BigNumber::removeStartZeros() {
 // to write
 std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
     if (bigNumber.sign) stream << "-";
-    stream << bigNumber.payload.back();
-    for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
-        stream <<
-               std::setfill('0') <<
-               std::setw(BigNumber::baseLen) <<
-               bigNumber.payload[i];
-    }
-
-    return stream;
+    return stream << BigNumber::toString(bigNumber);
 }
+
 
 // to read
 std::istream& operator>> (std::istream& stream, BigNumber& bigNumber) {
@@ -261,8 +255,9 @@ uint32_t BigNumber::getFirstChunk() {
 
 std::string BigNumber::debug() {
     std::string result = "\nPayload array:\n";
-    for (uint32_t item : payload) {
-        result += completeWithZeros(&item, BigNumber::baseLen) + " ";
+    for (int i = payload.size() - 1; i >= 0; i--) {
+        uint32_t item = payload[i];
+        result += completeWithZeros(item, BigNumber::baseLen) + " ";
     }
     result += "\nPoint position: " + std::to_string(pointPosition) + "\nSign: " + (sign ? "-" : "+");
     return result;
@@ -296,12 +291,13 @@ size_t BigNumber::digitLen() {
 }
 
 BigNumber BigNumber::removeZeros() {
+    std::cout << this->debug() << std::endl;
     size_t redundantZeros = 0;
     std::vector<uint32_t> tempPayload = payload;
 
     for (uint32_t& chunk : tempPayload) {
         if (chunk == 0) {
-            redundantZeros += 9;
+            redundantZeros += baseLen;
             continue;
         }
         while (chunk % 10 == 0) {
@@ -310,7 +306,17 @@ BigNumber BigNumber::removeZeros() {
         }
     }
 
-    std::cout << redundantZeros << std::endl;
+    tempPayload = payload;
+
+    while (tempPayload[0] == 0) {
+        tempPayload.erase(tempPayload.begin());
+    }
+
+    BigNumber rawNewNumber = BigNumber(tempPayload, sign, pointPosition - redundantZeros);
+
+    rawNewNumber = BigNumber(BigNumber::toString(rawNewNumber));
+
+    std::cout << rawNewNumber.debug() << std::endl;
 
     return *this;
 

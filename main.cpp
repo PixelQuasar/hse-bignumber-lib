@@ -5,8 +5,10 @@
 #include "BigNumber.h"
 
 int main() {
-    BigNumber x = BigNumber("1000000000000000");
-    x.removeZeros();
+    BigNumber x = BigNumber("12341234123400.000000000");
+
+    std::cout << x << std::endl;
+    //x.removeZeros();
 
     return 0;
 }
