@@ -15,7 +15,7 @@ BigNumber BigNumber::sub(BigNumber a, BigNumber b) {
         result.sign = false;
     }
     else if (a < b) {
-        std::swap(a, b);
+        BigNumber::swap(a, b);
         result.sign = true;
     }
     else {

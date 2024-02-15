@@ -20,17 +20,19 @@ class BigNumber {
         // constructors and destructors
         BigNumber();
 
-        BigNumber(int x);
+        explicit BigNumber(int x);
 
-        BigNumber(double x);
+        explicit BigNumber(double x);
 
-        BigNumber(float x);
+        explicit BigNumber(float x);
 
-        BigNumber(long long x);
+        explicit BigNumber(long long x);
 
-        BigNumber(std::string x);
+        explicit BigNumber(std::string x);
 
         BigNumber(BigNumber& x);
+
+        BigNumber(const BigNumber& x);
 
         ~BigNumber();
 
@@ -103,9 +105,10 @@ class BigNumber {
         std::string debug();
 
     private:
-        BigNumber(size_t n, uint32_t x);
+        explicit BigNumber(size_t n, uint32_t x);
 
-        BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
+        explicit BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
+
         // binary operators
         static BigNumber add(BigNumber a, BigNumber b);
 
@@ -130,6 +133,8 @@ class BigNumber {
         std::string toString();
 
         BigNumber removeStartZeros();
+
+        static void swap(BigNumber &a, BigNumber &b);
 
         static BigNumber countPi(int accuracy);
         //TODO: everything else

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <utility>
 #include "BigNumber.h"
 #include "utils/trim.cpp"
 #include "utils/completeWithZeros.cpp"
@@ -47,9 +48,21 @@ BigNumber::BigNumber(long long x) {
 
 // base constructor
 BigNumber::BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition) {
-    payload = newPayload;
+    payload = std::move(newPayload);
     sign = newSign;
     pointPosition = newPointPosition;
+}
+
+BigNumber::BigNumber(BigNumber& x) {
+    payload = x.payload;
+    pointPosition = x.pointPosition;
+    sign = x.sign;
+}
+
+BigNumber::BigNumber(const BigNumber& x) {
+    payload = x.payload;
+    pointPosition = x.pointPosition;
+    sign = x.sign;
 }
 
 BigNumber::BigNumber(std::string x) {
@@ -91,7 +104,7 @@ BigNumber::~BigNumber() {
 
 // utils
 std::string BigNumber::toString() {
-    std::string result = "";
+    std::string result;
     if (sign) result += "-";
     result += std::to_string(payload.back());
     for (int i = payload.size() - 2; i >= 0; i--) {
@@ -230,10 +243,7 @@ bool operator!=(const BigNumber& a, const int& b) {
 };
 
 BigNumber& BigNumber::operator=(const BigNumber& a) {
-    payload = a.payload;
-    pointPosition = a.pointPosition;
-    sign = a.sign;
-
+    *this = a;
     return *this;
 }
 
@@ -271,15 +281,6 @@ int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
         if (a.payload[i] > b.payload[i]) return a.sign ? 1 : -1;
     }
     return 0;
-}
-
-// copy
-BigNumber BigNumber::copy() const {
-    BigNumber newBigNumber;
-    newBigNumber.payload = payload;
-    newBigNumber.sign = sign;
-    newBigNumber.pointPosition = pointPosition;
-    return newBigNumber;
 }
 
 size_t BigNumber::digitLen() {
@@ -322,6 +323,12 @@ BigNumber BigNumber::shift(size_t numberOfZeros) {
 
 BigNumber BigNumber::countPi(int accuracy) {
 
+}
+
+void BigNumber::swap(BigNumber &a, BigNumber &b) {
+    std::swap(a.payload, b.payload);
+    std::swap(a.sign, b.sign);
+    std::swap(a.pointPosition, b.pointPosition);
 }
 
 
