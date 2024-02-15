@@ -5,9 +5,8 @@
 #include "BigNumber.h"
 
 int main() {
-    BigNumber x = 10000;
-    BigNumber y = 3;
-    std::cout << (x / y) << std::endl;
+    BigNumber x = BigNumber("1000000000000000");
+    x.removeZeros();
 
     return 0;
 }

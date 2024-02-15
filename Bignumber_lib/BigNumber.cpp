@@ -100,6 +100,10 @@ std::string BigNumber::toString() {
     return result;
 }
 
+BigNumber operator"" _bign(const char* x, size_t size) {
+    return BigNumber(x);
+}
+
 BigNumber BigNumber::removeStartZeros() {
 
 }
@@ -290,18 +294,24 @@ size_t BigNumber::digitLen() {
     return result;
 }
 
-
-
 BigNumber BigNumber::removeZeros() {
     size_t redundantZeros = 0;
     std::vector<uint32_t> tempPayload = payload;
 
-    for (int i = 0; i < tempPayload.size(); i++) {
-        while (tempPayload[i] % 10 == 0) {
-            tempPayload[i] /= 10;
+    for (uint32_t& chunk : tempPayload) {
+        if (chunk == 0) {
+            redundantZeros += 9;
+            continue;
+        }
+        while (chunk % 10 == 0) {
+            chunk /= 10;
             redundantZeros++;
         }
     }
+
+    std::cout << redundantZeros << std::endl;
+
+    return *this;
 
     // TODO: shift for redundant zeros
 }
