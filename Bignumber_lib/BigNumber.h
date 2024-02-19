@@ -64,8 +64,8 @@ class BigNumber {
         BigNumber& operator/=(const BigNumber &b);
 
 
-        // copy
-        BigNumber copy() const;
+        // abs
+        BigNumber abs();
 
         // get digits number
         size_t digitLen();
@@ -79,10 +79,10 @@ class BigNumber {
         explicit BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
 
         // binary operators
-        static BigNumber add(BigNumber a, BigNumber b);
-        static BigNumber sub(BigNumber a, BigNumber b);
-        static BigNumber mul(BigNumber a, BigNumber b);
-        static BigNumber div(BigNumber a, BigNumber b);
+        static BigNumber add(const BigNumber a, const BigNumber b);
+        static BigNumber sub(const BigNumber a, const BigNumber b);
+        static BigNumber mul(const BigNumber a, const BigNumber b);
+        static BigNumber div(const BigNumber a, const BigNumber b);
 
         BigNumber increment();
         BigNumber decrement();

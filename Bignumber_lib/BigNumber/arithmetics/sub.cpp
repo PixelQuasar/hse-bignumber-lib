@@ -2,21 +2,24 @@
 // Created by QUASARITY on 30.01.2024.
 //
 #include "BigNumber.h"
+#include <iostream>
 
-BigNumber BigNumber::sub(BigNumber a, BigNumber b) {
+BigNumber BigNumber::sub(const BigNumber a, const BigNumber b) {
     int carry = 0;
     BigNumber result;
 
     if (a.sign && !b.sign) {
         return add(a, -b);
     }
+    if (!a.sign && b.sign) {
+        return -add(-a, b);
+    }
 
     if (a > b) {
         result.sign = false;
     }
     else if (a < b) {
-        BigNumber::swap(a, b);
-        result.sign = true;
+        return -sub(b, a);
     }
     else {
         result.payload.push_back(0);
@@ -24,12 +27,25 @@ BigNumber BigNumber::sub(BigNumber a, BigNumber b) {
         return result;
     }
 
-    for (int i = 0; i <= a.payload.size() - b.payload.size() + 1; i++) {
-        b.payload.push_back(0);
+    result.pointPosition = a.pointPosition > b.pointPosition ? a.pointPosition : b.pointPosition;
+    std::string redundantMultiplier (std::abs(a.pointPosition - b.pointPosition), '0');
+    redundantMultiplier.insert (0, 1, '1');
+    BigNumber termA = a;
+    BigNumber termB = b;
+    if (termA.pointPosition > termB.pointPosition) {
+        termB *= BigNumber(redundantMultiplier);
+    }
+    else if (termA.pointPosition < termB.pointPosition) {
+        termA *= BigNumber(redundantMultiplier);
     }
 
-    for (int i = 0; i < a.payload.size(); i++) {
-        u_int32_t diff = BigNumber::base + a.payload[i] - b.payload[i] - carry;
+
+    for (int i = 0; i <= termA.payload.size() - termB.payload.size() + 1; i++) {
+        termB.payload.push_back(0);
+    }
+
+    for (int i = 0; i < termA.payload.size(); i++) {
+        u_int32_t diff = BigNumber::base + termA.payload[i] - termB.payload[i] - carry;
         carry = 0;
         if (diff > BigNumber::base) {
             diff -= BigNumber::base;
@@ -40,6 +56,5 @@ BigNumber BigNumber::sub(BigNumber a, BigNumber b) {
         result.payload.push_back(diff);
     }
 
-    result.pointPosition = 0;
     return result;
 }

@@ -4,9 +4,10 @@
 #include "BigNumber.h"
 #include <iostream>
 
-BigNumber BigNumber::mul(BigNumber a, BigNumber b) {
+BigNumber BigNumber::mul(const BigNumber a, const BigNumber b) {
     BigNumber c = BigNumber(a.payload.size() + b.payload.size(), 0);
     c.sign = a.sign ^ b.sign;
+    // if (b == BigNumber("0.5")) std::cout << a.pointPosition << " " << b.pointPosition << std::endl;
     c.pointPosition = a.pointPosition + b.pointPosition;
 
     for (size_t i = 0; i < a.payload.size(); ++i) {
@@ -20,5 +21,6 @@ BigNumber BigNumber::mul(BigNumber a, BigNumber b) {
     while (c.payload.size() > 1 && c.payload.back() == 0) {
         c.payload.pop_back();
     }
+    // if (b == BigNumber("0.5")) std::cout << "(" << c.pointPosition << ")" << std::endl;
     return c;
 }

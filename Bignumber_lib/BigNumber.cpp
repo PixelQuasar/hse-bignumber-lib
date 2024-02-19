@@ -304,6 +304,10 @@ int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
     return 0;
 }
 
+BigNumber BigNumber::abs() {
+    return BigNumber(payload, false, pointPosition);
+}
+
 size_t BigNumber::digitLen() {
     size_t result = (payload.size() - 1) * 9;
     uint32_t lastBlock = payload[payload.size() - 1];

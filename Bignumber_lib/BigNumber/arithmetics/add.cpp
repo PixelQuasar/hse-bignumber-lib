@@ -4,7 +4,7 @@
 #include "BigNumber.h"
 #include <iostream>
 
-BigNumber BigNumber::add(BigNumber a, BigNumber b) {
+BigNumber BigNumber::add(const BigNumber a, const BigNumber b) {
     if (a.sign && !b.sign) {
         return sub(b, -a);
     }
@@ -15,18 +15,19 @@ BigNumber BigNumber::add(BigNumber a, BigNumber b) {
 
     BigNumber result;
     result.pointPosition = a.pointPosition > b.pointPosition ? a.pointPosition : b.pointPosition;
-    std::string redundantMultiplier (abs(a.pointPosition - b.pointPosition), '0');
+    std::string redundantMultiplier (std::abs(a.pointPosition - b.pointPosition), '0');
     redundantMultiplier.insert (0, 1, '1');
-    if (a.pointPosition > b.pointPosition) {
-        b *= BigNumber(redundantMultiplier);
+    BigNumber termA = a, termB = b;
+    if (termA.pointPosition > termB.pointPosition) {
+        termB *= BigNumber(redundantMultiplier);
     }
-    else if (a.pointPosition < b.pointPosition) {
-        a *= BigNumber(redundantMultiplier);
+    else if (termA.pointPosition < termB.pointPosition) {
+        termA *= BigNumber(redundantMultiplier);
     }
 
     int carry = 0;
-    for (size_t i = 0; i < std::max(a.payload.size(), b.payload.size()); i++) {
-        uint32_t chunkSum = a.payload[i] + b.payload[i] + carry;
+    for (size_t i = 0; i < std::max(termA.payload.size(), termB.payload.size()); i++) {
+        uint32_t chunkSum = termA.payload[i] + termB.payload[i] + carry;
         if (chunkSum > BigNumber::base) {
             chunkSum -= BigNumber::base;
             carry = 1;
@@ -34,6 +35,6 @@ BigNumber BigNumber::add(BigNumber a, BigNumber b) {
         result.payload.push_back(chunkSum);
     }
 
-    if (a.sign) result.sign = true;
+    if (termA.sign) result.sign = true;
     return result;
 }

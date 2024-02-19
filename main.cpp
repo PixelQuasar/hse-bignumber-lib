@@ -5,9 +5,9 @@
 #include "BigNumber.h"
 
 int main() {
-    BigNumber a = BigNumber("12345.6");
-    BigNumber b = BigNumber("1234.56");
-    BigNumber c = a + b;
+    BigNumber a = BigNumber("6");
+    BigNumber b = BigNumber("3");
+    BigNumber c = a / b;
     std::cout << a << std::endl << b << std::endl << c << std::endl;
 
     return 0;
