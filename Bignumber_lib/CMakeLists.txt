@@ -11,6 +11,7 @@ set(SOURCE_FILES
         BigNumber/arithmetics/sub.cpp
         BigNumber/arithmetics/mul.cpp
         BigNumber/arithmetics/div.cpp
+        utils/strPowerOfTen.cpp
 )
 
 add_library(Bignumber_lib STATIC ${SOURCE_FILES} ${HEADER_FILES})

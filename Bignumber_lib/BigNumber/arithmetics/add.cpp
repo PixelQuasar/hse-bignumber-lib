@@ -2,6 +2,7 @@
 // Created by QUASARITY on 30.01.2024.
 //
 #include "BigNumber.h"
+#include "utils/strPowerOfTen.cpp"
 
 BigNumber BigNumber::add(BigNumber a, BigNumber b) {
     if (a.sign && !b.sign) {
@@ -13,7 +14,10 @@ BigNumber BigNumber::add(BigNumber a, BigNumber b) {
     }
 
     BigNumber result;
-    result.pointPosition = 0;
+    result.pointPosition = a.pointPosition > b.pointPosition ? a.pointPosition : b.pointPosition;
+    if (a.pointPosition > b.pointPosition) {
+        b *= BigNumber()
+    }
     int carry = 0;
     for (size_t i = 0; i < std::max(a.payload.size(), b.payload.size()); i++) {
         uint32_t chunkSum = a.payload[i] + b.payload[i] + carry;

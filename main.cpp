@@ -5,9 +5,9 @@
 #include "BigNumber.h"
 
 int main() {
-    BigNumber x = BigNumber("12341234123400.000000000");
-
-    std::cout << x << std::endl;
+    BigNumber x = BigNumber("123412121234123400.003000000000");
+    std::cout << x.removeZeros() << std::endl;
+    //std::cout << x << std::endl;
     //x.removeZeros();
 
     return 0;

@@ -67,7 +67,7 @@ BigNumber::BigNumber(const BigNumber& x) {
 
 BigNumber::BigNumber(std::string x) {
     // trim and erase zeros
-    x.erase ( x.find_last_not_of('.') + 1, std::string::npos );
+    //x.erase ( x.find_last_not_of('.') + 1, std::string::npos );
     x = trim(x);
 
     // get sign
@@ -237,14 +237,18 @@ bool operator!=(const BigNumber& a, const int& b) {
 };
 
 BigNumber& BigNumber::operator=(const BigNumber& a) {
-    *this = a;
+    payload = a.payload;
+    sign = a.sign;
+    pointPosition = a.pointPosition;
     return *this;
 }
 
 BigNumber& BigNumber::operator=(const int& a) {
     //TODO: optimize later
-    *this = BigNumber(a);
-
+    BigNumber newNumber = BigNumber(a);
+    payload = newNumber.payload;
+    sign = newNumber.sign;
+    pointPosition = newNumber.pointPosition;
     return *this;
 }
 
@@ -291,36 +295,13 @@ size_t BigNumber::digitLen() {
 }
 
 BigNumber BigNumber::removeZeros() {
-    std::cout << this->debug() << std::endl;
-    size_t redundantZeros = 0;
-    std::vector<uint32_t> tempPayload = payload;
-
-    for (uint32_t& chunk : tempPayload) {
-        if (chunk == 0) {
-            redundantZeros += baseLen;
-            continue;
-        }
-        while (chunk % 10 == 0) {
-            chunk /= 10;
-            redundantZeros++;
-        }
+    std::string rawString = BigNumber::toString(*this);
+    size_t lastCharIndex = rawString.length() - 1;
+    while ((rawString[lastCharIndex] == '0' && (rawString.length() - lastCharIndex) < pointPosition)) {
+        lastCharIndex--;
     }
-
-    tempPayload = payload;
-
-    while (tempPayload[0] == 0) {
-        tempPayload.erase(tempPayload.begin());
-    }
-
-    BigNumber rawNewNumber = BigNumber(tempPayload, sign, pointPosition - redundantZeros);
-
-    rawNewNumber = BigNumber(BigNumber::toString(rawNewNumber));
-
-    std::cout << rawNewNumber.debug() << std::endl;
-
-    return *this;
-
-    // TODO: shift for redundant zeros
+    rawString = rawString.substr(0, lastCharIndex + (rawString[lastCharIndex] == '.' ? 0 : 1));
+    return BigNumber(rawString);
 }
 
 BigNumber BigNumber::shift(size_t numberOfZeros) {
