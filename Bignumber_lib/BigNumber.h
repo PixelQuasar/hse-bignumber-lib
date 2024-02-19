@@ -65,7 +65,7 @@ class BigNumber {
 
 
         // abs
-        BigNumber abs();
+        BigNumber abs() const;
 
         // get digits number
         size_t digitLen();

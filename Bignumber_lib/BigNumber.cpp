@@ -125,7 +125,6 @@ BigNumber BigNumber::removeStartZeros() {
 
 // to write
 std::ostream& operator<< (std::ostream& stream, const BigNumber& bigNumber) {
-    if (bigNumber.sign) stream << "-";
     return stream << BigNumber::toString(bigNumber);
 }
 
@@ -304,7 +303,7 @@ int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
     return 0;
 }
 
-BigNumber BigNumber::abs() {
+BigNumber BigNumber::abs() const {
     return BigNumber(payload, false, pointPosition);
 }
 

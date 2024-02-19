@@ -7,8 +7,13 @@
 int main() {
     BigNumber a = BigNumber("6");
     BigNumber b = BigNumber("3");
-    BigNumber c = a / b;
-    std::cout << a << std::endl << b << std::endl << c << std::endl;
+    std::cout << a + b << std::endl; // 6 + 3 = 9
+    std::cout << (-a) + b << std::endl; // -6 + 3 = -3
+    std::cout << a - b << std::endl; // 6 - 3 = 3
+    std::cout << (-a) - b << std::endl; // -6 - 3 = -9
+    std::cout << a - (-b) << std::endl; // 6 - -3 = 9
+//    BigNumber c = a / b;
+//    std::cout << a << std::endl << b << std::endl << c << std::endl;
 
     return 0;
 }
