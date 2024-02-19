@@ -146,24 +146,54 @@ BigNumber operator-(const BigNumber& x) {
     return result;
 }
 
+BigNumber& BigNumber::operator=(const int& a) {
+    //TODO: optimize later
+    BigNumber newNumber = BigNumber(a);
+    payload = newNumber.payload;
+    sign = newNumber.sign;
+    pointPosition = newNumber.pointPosition;
+    return *this;
+}
+
+BigNumber& BigNumber::operator+=(const BigNumber &b) {
+    *this = BigNumber::add(*this, b);
+    return *this;
+}
+BigNumber& BigNumber::operator-=(const BigNumber& b) {
+    *this = BigNumber::sub(*this, b);
+    return *this;
+}
+BigNumber& BigNumber::operator*=(const BigNumber& b) {
+    *this = BigNumber::mul(*this, b);
+    return *this;
+}
+BigNumber& BigNumber::operator/=(const BigNumber& b) {
+    *this = BigNumber::div(*this, b);
+    return *this;
+}
+
 // sum
 BigNumber operator+(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::add(a, b);
+    BigNumber temp = a;
+    return temp += b;
 };
 
 // diff
 BigNumber operator-(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::sub(a, b);
+    BigNumber temp = a;
+    return temp -= b;
 };
 
 // mul
 BigNumber operator*(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::mul(a, b);
+    BigNumber temp = a;
+    return temp *= b;
 };
 
 // div
 BigNumber operator/(const BigNumber& a, const BigNumber& b) {
-    return BigNumber::div(a, b);
+    BigNumber temp = a;
+    return temp /= b;
 };
 
 
@@ -240,15 +270,6 @@ BigNumber& BigNumber::operator=(const BigNumber& a) {
     payload = a.payload;
     sign = a.sign;
     pointPosition = a.pointPosition;
-    return *this;
-}
-
-BigNumber& BigNumber::operator=(const int& a) {
-    //TODO: optimize later
-    BigNumber newNumber = BigNumber(a);
-    payload = newNumber.payload;
-    sign = newNumber.sign;
-    pointPosition = newNumber.pointPosition;
     return *this;
 }
 

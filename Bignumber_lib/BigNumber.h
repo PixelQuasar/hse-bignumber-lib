@@ -56,12 +56,13 @@ class BigNumber {
         BigNumber operator--(int);
 
         //assignment
-        BigNumber &operator=(const BigNumber &a);
-        BigNumber &operator=(const int &a);
-        BigNumber &operator+=(const BigNumber &a);
-        BigNumber &operator-=(const BigNumber &a);
-        BigNumber &operator*=(const BigNumber &a);
-        BigNumber &operator/=(const BigNumber &a);
+        BigNumber& operator=(const BigNumber &a);
+        BigNumber& operator=(const int &a);
+        BigNumber& operator+=(const BigNumber &b);
+        BigNumber& operator-=(const BigNumber &b);
+        BigNumber& operator*=(const BigNumber &b);
+        BigNumber& operator/=(const BigNumber &b);
+
 
         // copy
         BigNumber copy() const;
