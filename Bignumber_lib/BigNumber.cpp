@@ -67,7 +67,6 @@ BigNumber::BigNumber(const BigNumber& x) {
 
 BigNumber::BigNumber(std::string x) {
     // trim and erase zeros
-    //x.erase ( x.find_last_not_of('.') + 1, std::string::npos );
     x = trim(x);
 
     // get sign
@@ -83,7 +82,7 @@ BigNumber::BigNumber(std::string x) {
     for (int i = 0; i < x.length(); i++) {
         if (x[i] == '.' || x[i] == ',') {
             x.erase(i, 1);
-            pointPosition = i;
+            pointPosition = x.length() - i;
             break;
         }
     }
@@ -110,7 +109,9 @@ std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
     for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
         result += completeWithZeros(bigNumber.payload[i], BigNumber::baseLen);
     }
-    result.insert(bigNumber.pointPosition, 1, '.');
+    if (bigNumber.pointPosition != 0) {
+        result.insert(result.length() - bigNumber.pointPosition, 1, '.');
+    }
     return result;
 }
 
@@ -141,7 +142,7 @@ std::istream& operator>> (std::istream& stream, BigNumber& bigNumber) {
 BigNumber operator-(const BigNumber& x) {
     BigNumber result;
     result.payload = x.payload;
-    result.sign = !x.sign;
+    result.sign = !x.sign || x == BigNumber(0);
     result.payload = x.payload;
     return result;
 }

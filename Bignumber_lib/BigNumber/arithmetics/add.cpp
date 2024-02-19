@@ -15,12 +15,12 @@ BigNumber BigNumber::add(BigNumber a, BigNumber b) {
 
     BigNumber result;
     result.pointPosition = a.pointPosition > b.pointPosition ? a.pointPosition : b.pointPosition;
-    std::string redundantMultiplier (a.pointPosition - b.pointPosition, '0');
+    std::string redundantMultiplier (abs(a.pointPosition - b.pointPosition), '0');
     redundantMultiplier.insert (0, 1, '1');
     if (a.pointPosition > b.pointPosition) {
         b *= BigNumber(redundantMultiplier);
     }
-    if (b.pointPosition < a.pointPosition) {
+    else if (a.pointPosition < b.pointPosition) {
         a *= BigNumber(redundantMultiplier);
     }
 
@@ -35,6 +35,5 @@ BigNumber BigNumber::add(BigNumber a, BigNumber b) {
     }
 
     if (a.sign) result.sign = true;
-    result.pointPosition = 0;
     return result;
 }
