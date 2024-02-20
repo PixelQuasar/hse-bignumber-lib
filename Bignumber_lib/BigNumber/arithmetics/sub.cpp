@@ -34,11 +34,14 @@ BigNumber BigNumber::sub(const BigNumber a, const BigNumber b) {
     BigNumber termB = b;
     if (termA.pointPosition > termB.pointPosition) {
         termB *= BigNumber(redundantMultiplier);
+        termB.pointPosition = termA.pointPosition;
     }
     else if (termA.pointPosition < termB.pointPosition) {
         termA *= BigNumber(redundantMultiplier);
+        termA.pointPosition = termB.pointPosition;
     }
 
+    std::cout << termA << " " << termB << std::endl;
 
     for (int i = 0; i <= termA.payload.size() - termB.payload.size() + 1; i++) {
         termB.payload.push_back(0);

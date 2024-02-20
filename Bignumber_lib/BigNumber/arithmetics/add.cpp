@@ -9,8 +9,8 @@ BigNumber BigNumber::add(const BigNumber a, const BigNumber b) {
         return sub(b, -a);
     }
 
-    if (b.sign && !a.sign) {
-        return sub(a, b);
+    if (!a.sign && b.sign) {
+        return sub(a, -b);
     }
 
     BigNumber result;

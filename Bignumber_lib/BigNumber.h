@@ -72,7 +72,7 @@ class BigNumber {
 
         // Debug methods
         uint32_t getFirstChunk();
-        std::string debug();
+        std::string debug() const;
 
     private:
         explicit BigNumber(size_t n, uint32_t x);

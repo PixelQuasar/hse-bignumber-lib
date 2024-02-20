@@ -278,7 +278,7 @@ uint32_t BigNumber::getFirstChunk() {
     return payload[0];
 }
 
-std::string BigNumber::debug() {
+std::string BigNumber::debug() const {
     std::string result = "\nPayload array:\n";
     for (int i = payload.size() - 1; i >= 0; i--) {
         uint32_t item = payload[i];
@@ -294,11 +294,25 @@ int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
     // a > b: -1
     // a < b: 1
     // a = b: 0
-    if ((a.sign == 1 && b.sign == 0) || a.payload.size() < b.payload.size()) return 1;
-    if ((a.sign == 0 && b.sign == 1) || a.payload.size() > b.payload.size()) return -1;
-    for (int i = a.payload.size() - 1; i >= 0; i--) {
-        if (a.payload[i] < b.payload[i]) return a.sign ? -1 : 1;
-        if (a.payload[i] > b.payload[i]) return a.sign ? 1 : -1;
+    BigNumber tempA = a, tempB = b;
+    if (tempA.pointPosition != tempB.pointPosition) {
+        std::string redundantMultiplier (std::abs(tempA.pointPosition - tempB.pointPosition), '0');
+        redundantMultiplier.insert (0, 1, '1');
+        if (tempA.pointPosition < tempB.pointPosition) {
+            tempA *= BigNumber(redundantMultiplier);
+            tempA.pointPosition = b.pointPosition;
+        }
+        else {
+            tempB *= BigNumber(redundantMultiplier);
+            tempB.pointPosition = tempA.pointPosition;
+        }
+    }
+    //std::cout << tempA << " " << tempB << std::endl;
+    if ((tempA.sign == 1 && tempB.sign == 0) || tempA.payload.size() < tempB.payload.size()) return 1;
+    if ((tempA.sign == 0 && tempB.sign == 1) || tempA.payload.size() > tempB.payload.size()) return -1;
+    for (int i = tempA.payload.size() - 1; i >= 0; i--) {
+        if (tempA.payload[i] < tempB.payload[i]) return tempA.sign ? -1 : 1;
+        if (tempA.payload[i] > tempB.payload[i]) return tempA.sign ? 1 : -1;
     }
     return 0;
 }

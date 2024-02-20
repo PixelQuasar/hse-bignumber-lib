@@ -32,6 +32,7 @@ BigNumber BigNumber::div(const BigNumber a, const BigNumber b) {
         if ((mid * b).abs() > a.abs()) {
             //std::cout << " > " << mid.pointPosition << std::endl;
             high = mid - BigNumber(1);
+            std::cout << mid << " - 1 = " << high << std::endl;
             //std::cout << " > " << mid.pointPosition << std::endl;
 
             // To search in upper bound.
