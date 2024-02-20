@@ -79,10 +79,10 @@ class BigNumber {
         explicit BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
 
         // binary operators
-        static BigNumber add(const BigNumber a, const BigNumber b);
-        static BigNumber sub(const BigNumber a, const BigNumber b);
-        static BigNumber mul(const BigNumber a, const BigNumber b);
-        static BigNumber div(const BigNumber a, const BigNumber b);
+        static BigNumber add(const BigNumber a, const BigNumber b, bool reduceZeros = true);
+        static BigNumber sub(const BigNumber a, const BigNumber b, bool reduceZeros = true);
+        static BigNumber mul(const BigNumber a, const BigNumber b, bool reduceZeros = true);
+        static BigNumber div(const BigNumber a, const BigNumber b, bool reduceZeros = true);
 
         BigNumber increment();
         BigNumber decrement();
@@ -96,6 +96,7 @@ class BigNumber {
 
         // utils
         //std::string toString(bool point = true);
+        bool isZero() const;
         static std::string toString(const BigNumber& bigNumber, bool point = true);
         BigNumber removeStartZeros();
         static void swap(BigNumber &a, BigNumber &b);
@@ -104,6 +105,7 @@ class BigNumber {
 };
 
 BigNumber operator "" _bign(const char *x, size_t size);
-
+BigNumber operator "" _bign(long double x);
+BigNumber operator "" _bign(unsigned long long x);
 
 #endif //DEMO_LIB_BIGNUMBER_H

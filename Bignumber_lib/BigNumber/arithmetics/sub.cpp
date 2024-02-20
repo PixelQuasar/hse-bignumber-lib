@@ -4,26 +4,28 @@
 #include "BigNumber.h"
 #include <iostream>
 
-BigNumber BigNumber::sub(const BigNumber a, const BigNumber b) {
-    int carry = 0;
+BigNumber BigNumber::sub(const BigNumber a, const BigNumber b, bool reduceZeros) {
+    //std::cout << a << " - " << b << " = ";
     BigNumber result;
+    if (a.sign && !b.sign) return add(a, -b);
+    if (!a.sign && b.sign) return -add(-a, b);
 
-    if (a.sign && !b.sign) {
-        return add(a, -b);
+    if (a == b) return BigNumber(0);
+    if (a.isZero()) {
+        //std::cout << "SUBRES: " << b << std::endl;
+        return -b;
     }
-    if (!a.sign && b.sign) {
-        return -add(-a, b);
+    if (b.isZero()) {
+        //std::cout << "SUBRES: " << a << std::endl;
+        return a;
     }
 
-    if (a > b) {
-        result.sign = false;
-    }
-    else if (a < b) {
-        return -sub(b, a);
-    }
+    if (a > b) result.sign = false;
+    else if (a < b) return -sub(b, a);
     else {
         result.payload.push_back(0);
         result.sign = false;
+        //std::cout << "SUBRES: " << result << std::endl;
         return result;
     }
 
@@ -33,31 +35,62 @@ BigNumber BigNumber::sub(const BigNumber a, const BigNumber b) {
     BigNumber termA = a;
     BigNumber termB = b;
     if (termA.pointPosition > termB.pointPosition) {
-        termB *= BigNumber(redundantMultiplier);
+        termB = BigNumber::mul(termB, BigNumber(redundantMultiplier), false);
         termB.pointPosition = termA.pointPosition;
     }
     else if (termA.pointPosition < termB.pointPosition) {
-        termA *= BigNumber(redundantMultiplier);
+        termA = BigNumber::mul(termA, BigNumber(redundantMultiplier), false);
         termA.pointPosition = termB.pointPosition;
     }
 
-    std::cout << termA << " " << termB << std::endl;
+    //std::cout << "\nSUB:\n" << termA << "\n" << termB << std::endl << std::endl;
+    //std:: cout << termA.debug() << termB.debug() << std::endl;
+    //return result.removeZeros();
 
-    for (int i = 0; i <= termA.payload.size() - termB.payload.size() + 1; i++) {
-        termB.payload.push_back(0);
+    int completeWithZerosValue = termA.payload.size() - termB.payload.size();
+    //std::cout << "hi!!! " << completeWithZerosValue << std::endl;
+    if (completeWithZerosValue < 0) {
+        for (int i = 0; i < -completeWithZerosValue; i++) {
+            termA.payload.push_back(0);
+        };
     }
-
-    for (int i = 0; i < termA.payload.size(); i++) {
-        u_int32_t diff = BigNumber::base + termA.payload[i] - termB.payload[i] - carry;
-        carry = 0;
-        if (diff > BigNumber::base) {
-            diff -= BigNumber::base;
-        }
-        else {
-            carry = 1;
-        }
-        result.payload.push_back(diff);
+    else if (completeWithZerosValue > 0) {
+        for (int i = 0; i < completeWithZerosValue; i++) {
+            termB.payload.push_back(0);
+        };
     }
+    //std::cout << "hi" << std::endl;
+    //std::cout << termA << std::endl << termB << std::endl;
+    //std::cout << termA.debug() << std::endl << termB.debug() << std::endl;
+    int carry = 0;
+    for (size_t i = 0; i < termB.payload.size() || carry; i++) {
+        //std::cout << "CONDITION " << (i < termB.payload.size()) << " " << carry << std::endl;
+        int currentChunk = termA.payload[i] - carry - termB.payload[i];
+        //std::cout << currentChunk << std::endl;
+        carry = currentChunk < 0;
+        if (carry) currentChunk += base;
+        result.payload.push_back(currentChunk);
+        //std::cout << "CHUNK: " << currentChunk << " (" << termA.payload[i] << " " << termB.payload[i] << ")" << std::endl;
+        //std::cout << "CARRY: " << carry << std::endl;
+    }
+    //std::cout << result.debug() << std::endl;
 
-    return result;
+    while (result.payload.size() > 1 && result.payload.back() == 0) {
+        result.payload.pop_back();
+    }
+    //std::cout << "SUBRES: " << result << std::endl;
+    return reduceZeros ? result.removeZeros() : result;
+
+//    for (int i = 0; i < termA.payload.size(); i++) {
+//        u_int32_t diff = BigNumber::base + termA.payload[i] - termB.payload[i] - carry;
+//        carry = 0;
+//        if (diff > BigNumber::base) {
+//            diff -= BigNumber::base;
+//        }
+//        else {
+//            carry = 1;
+//        }
+//        std::cout << diff << std::endl;
+//        result.payload.push_back(diff);
+//    }
 }

@@ -105,11 +105,16 @@ BigNumber::~BigNumber() {
 std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
     std::string result;
     if (bigNumber.sign) result += "-";
+    //std::cout << bigNumber.debug() << std::endl;
     result += std::to_string(bigNumber.payload.back());
     for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
         result += completeWithZeros(bigNumber.payload[i], BigNumber::baseLen);
     }
     if (bigNumber.pointPosition != 0) {
+        if (result.length() - 1 <= bigNumber.pointPosition) {
+            result.insert(0, bigNumber.pointPosition - result.length() + 1, '0');
+        }
+        //std::cout << "RESULT: " <<  result << std::endl;
         result.insert(result.length() - bigNumber.pointPosition, 1, '.');
     }
     return result;
@@ -117,6 +122,10 @@ std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
 
 BigNumber operator"" _bign(const char* x, size_t size) {
     return BigNumber(x);
+}
+
+BigNumber operator"" _bign(long double x) {
+    return BigNumber(std::to_string(x));
 }
 
 BigNumber BigNumber::removeStartZeros() {
@@ -295,19 +304,27 @@ int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
     // a < b: 1
     // a = b: 0
     BigNumber tempA = a, tempB = b;
+    //while (*tempA.payload.end() == 0) tempA.payload.pop_back();
+    //while (*tempB.payload.end() == 0) tempB.payload.pop_back();
     if (tempA.pointPosition != tempB.pointPosition) {
         std::string redundantMultiplier (std::abs(tempA.pointPosition - tempB.pointPosition), '0');
         redundantMultiplier.insert (0, 1, '1');
         if (tempA.pointPosition < tempB.pointPosition) {
-            tempA *= BigNumber(redundantMultiplier);
+            tempA = BigNumber::mul(tempA, BigNumber(redundantMultiplier), false);
             tempA.pointPosition = b.pointPosition;
         }
         else {
-            tempB *= BigNumber(redundantMultiplier);
+            tempB = BigNumber::mul(tempB, BigNumber(redundantMultiplier), false);
             tempB.pointPosition = tempA.pointPosition;
         }
     }
-    //std::cout << tempA << " " << tempB << std::endl;
+    if (tempA.payload.size() < tempB.payload.size()) {
+        while (tempA.payload.size() < tempB.payload.size()) tempA.payload.push_back(0);
+    }
+    if (tempA.payload.size() > tempB.payload.size()) {
+        while (tempA.payload.size() > tempB.payload.size()) tempB.payload.push_back(0);
+    }
+    //std::cout << tempA.debug() << " " << tempB.debug() << std::endl;
     if ((tempA.sign == 1 && tempB.sign == 0) || tempA.payload.size() < tempB.payload.size()) return 1;
     if ((tempA.sign == 0 && tempB.sign == 1) || tempA.payload.size() > tempB.payload.size()) return -1;
     for (int i = tempA.payload.size() - 1; i >= 0; i--) {
@@ -334,21 +351,46 @@ size_t BigNumber::digitLen() {
 }
 
 BigNumber BigNumber::removeZeros() {
+    if (this->isZero()) return BigNumber(0);
+    if (pointPosition == 0) return *this;
     std::string rawString = BigNumber::toString(*this);
     size_t lastCharIndex = rawString.length() - 1;
     while ((rawString[lastCharIndex] == '0' && (rawString.length() - lastCharIndex) < pointPosition)) {
         lastCharIndex--;
     }
-    rawString = rawString.substr(0, lastCharIndex + (rawString[lastCharIndex] == '.' ? 0 : 1));
+    rawString = rawString.substr(0, lastCharIndex - (rawString[lastCharIndex] == '.' ? 0 : 1));
     return BigNumber(rawString);
+}
+
+bool BigNumber::isZero() const {
+    return payload.size() == 1 && payload[0] == 0;
 }
 
 BigNumber BigNumber::shift(size_t numberOfZeros) {
     // TODO: shift implementation
 }
 
-BigNumber BigNumber::countPi(int accuracy) {
+BigNumber pow(BigNumber a, size_t n) {
+    BigNumber result = BigNumber(1);
+    for (int i = 0; i < n; i++) {
+        result *= a;
+    }
+    return result;
+}
 
+BigNumber BigNumber::countPi(int accuracy) {
+    BigNumber result = BigNumber(0);
+    for (int i = 0; i < 100; i++) {
+        BigNumber k = BigNumber(i);
+        BigNumber mult =
+                "4"_bign / ("8"_bign * k + "1"_bign) -
+                "2"_bign / ("8"_bign * k + "4"_bign) -
+                "1"_bign / ("8"_bign * k + "5"_bign) -
+                "1"_bign / ("8"_bign * k + "6"_bign);
+        //std::cout << mult << std::endl;
+        result += pow(BigNumber("0.0625"), i) * mult;
+    }
+    return result;
 }
 
 void BigNumber::swap(BigNumber &a, BigNumber &b) {
@@ -357,7 +399,7 @@ void BigNumber::swap(BigNumber &a, BigNumber &b) {
     std::swap(a.pointPosition, b.pointPosition);
 }
 
-
-
-
 //TODO: everything else
+
+// 3.1429338365056205817902644453098570892681561706235397406390117582497163894322523552343666204815021564746569316034545821878892978389944908891584507415473126457072794437408447265625
+// 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
