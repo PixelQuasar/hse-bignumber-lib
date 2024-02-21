@@ -27,9 +27,15 @@ BigNumber::BigNumber(int x) {
     *this = fromString;
 }
 
+// constructor with long double
+BigNumber::BigNumber(long double x) {
+    BigNumber fromString = BigNumber(std::to_string(x)).removeZeros();
+    *this = fromString;
+}
+
 // constructor with double
 BigNumber::BigNumber(double x) {
-    BigNumber fromString = BigNumber(std::to_string(x));
+    BigNumber fromString = BigNumber(std::to_string(x)).removeZeros();
     *this = fromString;
 }
 
@@ -97,7 +103,6 @@ BigNumber::~BigNumber() {
 // utils
 std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
     std::string result;
-    //std::cout << bigNumber.debug() << std::endl;
     result += std::to_string(bigNumber.payload.back());
     for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
         result += completeWithZeros(bigNumber.payload[i], BigNumber::baseLen);
@@ -106,7 +111,6 @@ std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
         if (result.length() - 1 <= bigNumber.pointPosition) {
             result.insert(0, bigNumber.pointPosition - result.length() + 1, '0');
         }
-        //std::cout << "RESULT: " <<  result << std::endl;
         result.insert(result.length() - bigNumber.pointPosition, 1, '.');
     }
     if (bigNumber.sign) result.insert(0, 1, '-');
@@ -118,11 +122,7 @@ BigNumber operator"" _bign(const char* x, size_t size) {
 }
 
 BigNumber operator"" _bign(long double x) {
-    return BigNumber(std::to_string(x));
-}
-
-BigNumber BigNumber::removeStartZeros() {
-
+    return BigNumber(x);
 }
 
 // to write
@@ -198,19 +198,6 @@ BigNumber operator/(const BigNumber& a, const BigNumber& b) {
     return temp /= b;
 };
 
-
-BigNumber BigNumber::operator++(int) {
-    BigNumber old = *this;
-    *this = add(*this, BigNumber(1));
-    return old;
-}
-
-BigNumber BigNumber::operator--(int) {
-    BigNumber old = *this;
-    *this = sub(*this, BigNumber(1));
-    return old;
-}
-
 // for BigNumber
 bool operator==(const BigNumber& a, const BigNumber& b) {
     return BigNumber::compare(a, b) == 0;
@@ -245,10 +232,6 @@ BigNumber& BigNumber::operator=(const BigNumber& a) {
 }
 
 // DEBUG METHODS: REMOVE LATER
-uint32_t BigNumber::getFirstChunk() {
-    return payload[0];
-}
-
 std::string BigNumber::debug() const {
     std::string result = "\nPayload array:\n";
     for (int i = payload.size() - 1; i >= 0; i--) {
@@ -265,18 +248,7 @@ BigNumber BigNumber::abs() const {
     return BigNumber(payload, false, pointPosition);
 }
 
-size_t BigNumber::digitLen() {
-    size_t result = (payload.size() - 1) * 9;
-    uint32_t lastBlock = payload[payload.size() - 1];
-
-    while (lastBlock > 0) {
-        result++;
-        lastBlock /= 10;
-    }
-
-    return result;
-}
-
+// sorry for that
 BigNumber BigNumber::removeZeros() {
     if (this->isZero()) return BigNumber(0);
     if (pointPosition == 0) return *this;

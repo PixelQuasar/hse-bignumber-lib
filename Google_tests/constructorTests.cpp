@@ -28,7 +28,7 @@ TEST(ConstructorTestSuite, FromInt) {
 TEST(ConstructorTestSuite, FromDouble) {
     BigNumber a = BigNumber(-234.234);
     std::string result = BigNumber::toString(a);
-    std::string expected = std::to_string(-234.234);
+    std::string expected = "-234.234";
     std::cout << OUTPUT_PREFIX << "EXPECTED: " << expected << std::endl;
     std::cout << OUTPUT_PREFIX << "GOT: " << result << std::endl;
     ASSERT_EQ(result, expected);
@@ -48,6 +48,24 @@ TEST(ConstructorTestSuite, Copy) {
     BigNumber b = a;
     std::string result = BigNumber::toString(b);
     std::string expected = "777";
+    std::cout << OUTPUT_PREFIX << "EXPECTED: " << expected << std::endl;
+    std::cout << OUTPUT_PREFIX << "GOT: " << result << std::endl;
+    ASSERT_EQ(result, expected);
+}
+
+TEST(LiteralsTestSuite, FromString) {
+    BigNumber a = "777"_bign;
+    std::string result = BigNumber::toString(a);
+    std::string expected = "777";
+    std::cout << OUTPUT_PREFIX << "EXPECTED: " << expected << std::endl;
+    std::cout << OUTPUT_PREFIX << "GOT: " << result << std::endl;
+    ASSERT_EQ(result, expected);
+}
+
+TEST(LiteralsTestSuite, FromDouble) {
+    BigNumber a = 777.777_bign;
+    std::string result = BigNumber::toString(a);
+    std::string expected = "777.777";
     std::cout << OUTPUT_PREFIX << "EXPECTED: " << expected << std::endl;
     std::cout << OUTPUT_PREFIX << "GOT: " << result << std::endl;
     ASSERT_EQ(result, expected);

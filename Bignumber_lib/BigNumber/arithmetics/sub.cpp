@@ -22,9 +22,7 @@ BigNumber BigNumber::sub(const BigNumber& a, const BigNumber& b, bool reduceZero
         return -sub(b, a);
     }
     else {
-        result.payload.push_back(0);
-        result.sign = false;
-        return result;
+        return BigNumber(0);
     }
 
     result.pointPosition = a.pointPosition > b.pointPosition ? a.pointPosition : b.pointPosition;

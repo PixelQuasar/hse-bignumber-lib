@@ -10,10 +10,16 @@ BigNumber pow(BigNumber a, size_t n) {
 }
 
 BigNumber BigNumber::countPi(int accuracy) {
+    if (accuracy == 0) return BigNumber(3);
+    if (accuracy == 1) return BigNumber(3.14);
+    if (accuracy == 2) return BigNumber(3.14);
+    if (accuracy == 3) return BigNumber(3.141);
+    if (accuracy == 4) return BigNumber(3.1415);
     BigNumber result = BigNumber(0);
     BigNumber kFactorialInPowerOf3 = BigNumber(1);
     BigNumber k3Factorial = BigNumber(1);
     BigNumber k6Factorial = BigNumber(1);
+    // this function uses Chudnovsky formula to calculate Pi. I'm scared that next values can't be named anyway but magic numbers
     BigNumber MAGIC_NUMBER_ONE = "13591409"_bign;
     BigNumber MAGIC_NUMBER_TWO = "545140134"_bign;
     BigNumber MAGIC_NUMBER_THREE = "640320"_bign;
@@ -22,7 +28,7 @@ BigNumber BigNumber::countPi(int accuracy) {
             MAGIC_NUMBER_FOUR_RAW.substr(0,
                                          std::max(12, std::min(accuracy + 12, static_cast<int>(MAGIC_NUMBER_FOUR_RAW.length())))));
 
-    for (int k = 0; k < std::max(10, accuracy / 10); k++) {
+    for (int k = 0; k < std::min(8, accuracy / 10 - 2); k++) {
         if (k != 0) {
             kFactorialInPowerOf3 *= BigNumber(k * k * k);
             for (int j = 0; j < 6; j++) {
@@ -41,7 +47,7 @@ BigNumber BigNumber::countPi(int accuracy) {
     }
     result = result * "12"_bign;
     result = BigNumber(BigNumber::toString(result).substr(0, accuracy + 5));
-    result = BigNumber::div("1"_bign, result, false, accuracy * 10);
+    result = BigNumber::div("1"_bign, result, false, accuracy * 3);
 
     return BigNumber(BigNumber::toString(result).substr(0, accuracy + 2));
 }

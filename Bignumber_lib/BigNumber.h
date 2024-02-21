@@ -1,5 +1,5 @@
 //
-// Created by QUASARITY on 27.01.2024 with love.
+// Created by QUASARITY on 27.01.2024.
 //
 
 #ifndef DEMO_LIB_BIGNUMBER_H
@@ -8,19 +8,12 @@
 #include <vector>
 
 class BigNumber {
-        static const int base = 1e9;
-        static const int baseLen = 9;
-        static const int _precision = 300;
-
-        int pointPosition;
-        bool sign;
-        std::vector<uint32_t> payload;
-
     public:
         // constructors and destructors
         BigNumber();
 
         explicit BigNumber(int x);
+        explicit BigNumber(long double x);
         explicit BigNumber(double x);
         explicit BigNumber(long x);
         explicit BigNumber(std::string x);
@@ -48,8 +41,6 @@ class BigNumber {
 
         // unary
         friend BigNumber operator-(const BigNumber &x);
-        BigNumber operator++(int);
-        BigNumber operator--(int);
 
         //assignment
         BigNumber& operator=(const BigNumber &a);
@@ -62,14 +53,19 @@ class BigNumber {
         // abs
         BigNumber abs() const;
 
-        // get digits number
-        size_t digitLen();
-
         // Debug methods
-        uint32_t getFirstChunk();
         std::string debug() const;
 
+        static BigNumber countPi(int accuracy);
     private:
+        static const int base = 1e9;
+        static const int baseLen = 9;
+        static const int defaultPrecision = 220;
+
+        int pointPosition;
+        bool sign;
+        std::vector<uint32_t> payload;
+
         explicit BigNumber(size_t n, uint32_t x);
         explicit BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
 
@@ -77,9 +73,8 @@ class BigNumber {
         static BigNumber add(const BigNumber& a, const BigNumber& b, bool reduceZeros = true);
         static BigNumber sub(const BigNumber& a, const BigNumber& b, bool reduceZeros = true);
         static BigNumber mul(const BigNumber& a, const BigNumber& b, bool reduceZeros = true);
-        static BigNumber div(const BigNumber& a, const BigNumber& b, bool reduceZeros = true, size_t precision = _precision);
+        static BigNumber div(const BigNumber& a, const BigNumber& b, bool reduceZeros = true, size_t precision = defaultPrecision);
 
-    public: // TODO: remove on prod
         BigNumber removeZeros();
 
         // compare operators
@@ -87,10 +82,7 @@ class BigNumber {
 
         // utils
         bool isZero() const;
-        BigNumber removeStartZeros();
         static void swap(BigNumber &a, BigNumber &b);
-        static BigNumber countPi(int accuracy);
-        //TODO: everything else
 };
 
 BigNumber operator "" _bign(const char *x, size_t size);
