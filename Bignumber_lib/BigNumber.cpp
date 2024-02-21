@@ -387,8 +387,16 @@ BigNumber BigNumber::countPi(int accuracy) {
     BigNumber k3Factorial = BigNumber(1);
     BigNumber k6Factorial = BigNumber(1);
 
-    BigNumber rootTerm = BigNumber("512384047.99600074981255466992791529927985060803010899361005608614623126188949113059562159893746802321614884");
-    for (int k = 0; k < 10; k++) {
+    BigNumber MAGIC_NUMBER_ONE = "13591409"_bign;
+    BigNumber MAGIC_NUMBER_TWO = "545140134"_bign;
+    BigNumber MAGIC_NUMBER_THREE = "640320"_bign;
+    std::string MAGIC_NUMBER_FOUR_RAW = "512384047.99600074981255466992791529927985060803010899361005608614623126188949113059562159893746802321614884";
+    BigNumber MAGIC_NUMBER_FOUR = BigNumber(
+            MAGIC_NUMBER_FOUR_RAW.substr(0,
+                    std::max(12, std::min(accuracy + 12, static_cast<int>(MAGIC_NUMBER_FOUR_RAW.length())))));
+
+    std::cout << MAGIC_NUMBER_FOUR << std::endl;
+    for (int k = 0; k < std::max(10, accuracy / 10); k++) {
         if (k != 0) {
             kFactorialInPowerOf3 *= BigNumber(k * k * k);
             for (int j = 0; j < 6; j++) {
@@ -398,35 +406,20 @@ BigNumber BigNumber::countPi(int accuracy) {
                 k3Factorial *= BigNumber(k * 3 - j);
             }
         }
-        //std::cout << kFactorialInPowerOf3 << std::endl << k3Factorial << std::endl << k6Factorial << std::endl;
         BigNumber mult = BigNumber(
-                k6Factorial * ("13591409"_bign + "545140134"_bign * BigNumber(k)) /
-                        ((k3Factorial) * kFactorialInPowerOf3 * pow("640320"_bign, 3 * k) * rootTerm)
+                k6Factorial * (MAGIC_NUMBER_ONE + MAGIC_NUMBER_TWO * BigNumber(k)) /
+                        ((k3Factorial) * kFactorialInPowerOf3 * pow(MAGIC_NUMBER_THREE, 3 * k) * MAGIC_NUMBER_FOUR)
                 );
         mult.sign = (k & 1);
-        //std::cout << "A: " << k6Factorial * ("13591409"_bign + "545140134"_bign * BigNumber(k)) << std::endl;
-        //std::cout << "B: " << (k3Factorial) * kFactorialInPowerOf3 * pow("640320"_bign, 3 * k) * "512384047.996"_bign << std::endl;
-        //std::cout << "MULT: " << mult << std::endl;
 
         result += mult;
-        //std::cout << result << std::endl;
-
-        //std::cout << std::endl;
-//        BigNumber k = BigNumber(i);
-//        BigNumber mult =
-//                "4"_bign / ("8"_bign * k + "1"_bign) -
-//                "2"_bign / ("8"_bign * k + "4"_bign) -
-//                "1"_bign / ("8"_bign * k + "5"_bign) -
-//                "1"_bign / ("8"_bign * k + "6"_bign);
-//        //std::cout << mult << std::endl;
-//        result += pow(BigNumber("0.0625"), i) * mult;
     }
-    //std::cout << result << std::endl;
     result = result * "12"_bign;
+    result = BigNumber(BigNumber::toString(result).substr(0, accuracy + 5));
+    result = BigNumber::div("1"_bign, result, false, accuracy * 10);
     std::cout << result << std::endl;
-    result = BigNumber::div("1"_bign, result, false, 500);
-    std::cout << "TEST: " << BigNumber::toString(result).substr(0, 106) << std::endl;
-    return result;
+
+    return BigNumber(BigNumber::toString(result).substr(0, accuracy + 2));
 }
 
 void BigNumber::swap(BigNumber &a, BigNumber &b) {
