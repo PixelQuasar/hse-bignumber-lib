@@ -4,7 +4,7 @@
 #include "BigNumber.h"
 #include <iostream>
 
-BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros) {
+BigNumber BigNumber::add(const BigNumber& a, const BigNumber& b, bool reduceZeros) {
     if (a.sign && !b.sign) return sub(b, -a);
     if (!a.sign && b.sign) return sub(a, -b);
     if (a.isZero()) {

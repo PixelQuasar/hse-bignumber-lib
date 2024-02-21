@@ -74,10 +74,10 @@ class BigNumber {
         explicit BigNumber(std::vector<u_int32_t> newPayload, bool newSign, int newPointPosition);
 
         // binary operators
-        static BigNumber add(const BigNumber a, const BigNumber b, bool reduceZeros = true);
-        static BigNumber sub(const BigNumber a, const BigNumber b, bool reduceZeros = true);
-        static BigNumber mul(const BigNumber a, const BigNumber b, bool reduceZeros = true);
-        static BigNumber div(const BigNumber a, const BigNumber b, bool reduceZeros = true, size_t precision = _precision);
+        static BigNumber add(const BigNumber& a, const BigNumber& b, bool reduceZeros = true);
+        static BigNumber sub(const BigNumber& a, const BigNumber& b, bool reduceZeros = true);
+        static BigNumber mul(const BigNumber& a, const BigNumber& b, bool reduceZeros = true);
+        static BigNumber div(const BigNumber& a, const BigNumber& b, bool reduceZeros = true, size_t precision = _precision);
 
     public: // TODO: remove on prod
         BigNumber removeZeros();

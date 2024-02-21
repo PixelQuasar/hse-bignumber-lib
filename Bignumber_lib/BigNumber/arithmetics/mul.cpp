@@ -4,7 +4,7 @@
 #include "BigNumber.h"
 #include <iostream>
 
-BigNumber BigNumber::mul(const BigNumber a, const BigNumber b, bool reduceZeros) {
+BigNumber BigNumber::mul(const BigNumber& a, const BigNumber& b, bool reduceZeros) {
     BigNumber result = BigNumber(a.payload.size() + b.payload.size(), 0);
     result.sign = a.sign ^ b.sign;
     result.pointPosition = a.pointPosition + b.pointPosition;

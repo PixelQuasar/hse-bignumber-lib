@@ -11,7 +11,7 @@ BigNumber powerOfTen(int n) {
     return BigNumber(result);
 }
 
-BigNumber BigNumber::div(const BigNumber a, const BigNumber b, bool reduceZeros, size_t precision) {
+BigNumber BigNumber::div(const BigNumber& a, const BigNumber& b, bool reduceZeros, size_t precision) {
     if (b == BigNumber(1))  {
         return a;
     }
