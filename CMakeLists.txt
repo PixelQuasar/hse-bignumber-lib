@@ -12,3 +12,16 @@ add_subdirectory(Bignumber_lib)
 target_link_libraries(Bignumber_run Bignumber_lib)
 
 add_subdirectory(Google_tests)
+
+# tests!
+add_executable(cMakeTest main.cpp)
+target_link_libraries(cMakeTest PRIVATE Bignumber_lib)
+
+# enable testing functionality
+enable_testing()
+
+# define tests
+add_test(
+        NAME cMakeTest
+        COMMAND $<TARGET_FILE:cMakeTest>
+)

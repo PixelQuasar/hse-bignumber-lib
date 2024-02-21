@@ -5,16 +5,12 @@
 #include <iostream>
 
 BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros) {
-    // handle base cases:
-    //std::cout << a << " + " << b << " = ";
     if (a.sign && !b.sign) return sub(b, -a);
     if (!a.sign && b.sign) return sub(a, -b);
     if (a.isZero()) {
-        //std::cout << b << std::endl;
         return b;
     }
     if (b.isZero()) {
-        //std::cout << b << std::endl;
         return a;
     }
 
@@ -40,8 +36,6 @@ BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros)
     termA.payload.push_back(0);
     termB.payload.push_back(0);
 
-    //std::cout << termA << " " << termB << std::endl;
-
     int carry = 0;
     for (size_t i = 0; i < std::max(termA.payload.size(), termB.payload.size()); i++) {
         uint32_t chunkSum = termA.payload[i] + termB.payload[i] + carry;
@@ -59,6 +53,5 @@ BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros)
         result.payload.pop_back();
     }
 
-    //std::cout << result << std::endl;
     return reduceZeros ? result.removeZeros() : result;
 }

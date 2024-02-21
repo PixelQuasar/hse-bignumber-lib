@@ -5,7 +5,6 @@
 #include <iostream>
 
 BigNumber BigNumber::mul(const BigNumber a, const BigNumber b, bool reduceZeros) {
-    //std::cout << a << " * " << b << " = ";
     BigNumber result = BigNumber(a.payload.size() + b.payload.size(), 0);
     result.sign = a.sign ^ b.sign;
     result.pointPosition = a.pointPosition + b.pointPosition;
@@ -21,6 +20,5 @@ BigNumber BigNumber::mul(const BigNumber a, const BigNumber b, bool reduceZeros)
     while (result.payload.size() > 1 && result.payload.back() == 0) {
         result.payload.pop_back();
     }
-    //std::cout << result << std::endl;
     return reduceZeros ? result.removeZeros() : result;
 }

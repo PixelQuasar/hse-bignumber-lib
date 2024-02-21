@@ -32,17 +32,14 @@ class BigNumber {
         friend std::ostream &operator<<(std::ostream &stream, const BigNumber &bigNumber);
         friend std::istream &operator>>(std::istream &stream, BigNumber &bigNumber);
 
+        static std::string toString(const BigNumber& bigNumber, bool point = true);
+
         // binary
         friend BigNumber operator+(const BigNumber &a, const BigNumber &b);
         friend BigNumber operator-(const BigNumber &a, const BigNumber &b);
         friend BigNumber operator*(const BigNumber &a, const BigNumber &b);
         friend BigNumber operator/(const BigNumber &a, const BigNumber &b);
-        friend bool operator==(const BigNumber &a, const int &b);
-        friend bool operator>(const BigNumber &a, const int &b);
-        friend bool operator>=(const BigNumber &a, const int &b);
-        friend bool operator<(const BigNumber &a, const int &b);
-        friend bool operator<=(const BigNumber &a, const int &b);
-        friend bool operator!=(const BigNumber &a, const int &b);
+
         friend bool operator==(const BigNumber &a, const BigNumber &b);
         friend bool operator>(const BigNumber &a, const BigNumber &b);
         friend bool operator>=(const BigNumber &a, const BigNumber &b);
@@ -63,7 +60,6 @@ class BigNumber {
         BigNumber& operator*=(const BigNumber &b);
         BigNumber& operator/=(const BigNumber &b);
 
-
         // abs
         BigNumber abs() const;
 
@@ -82,23 +78,16 @@ class BigNumber {
         static BigNumber add(const BigNumber a, const BigNumber b, bool reduceZeros = true);
         static BigNumber sub(const BigNumber a, const BigNumber b, bool reduceZeros = true);
         static BigNumber mul(const BigNumber a, const BigNumber b, bool reduceZeros = true);
-public:
         static BigNumber div(const BigNumber a, const BigNumber b, bool reduceZeros = true, size_t precision = _precision);
-
-        BigNumber increment();
-        BigNumber decrement();
 
     public: // TODO: remove on prod
         BigNumber removeZeros();
-        BigNumber shift(size_t numberOfZeros);
 
         // compare operators
         static int compare(const BigNumber &a, const BigNumber &b);
 
         // utils
-        //std::string toString(bool point = true);
         bool isZero() const;
-        static std::string toString(const BigNumber& bigNumber, bool point = true);
         BigNumber removeStartZeros();
         static void swap(BigNumber &a, BigNumber &b);
         static BigNumber countPi(int accuracy);

@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <iomanip>
 #include <utility>
 #include "BigNumber.h"
 #include "utils/trim.cpp"
@@ -244,37 +243,6 @@ bool operator!=(const BigNumber& a, const BigNumber& b) {
     return BigNumber::compare(a, b) != 0;
 };
 
-// for int
-bool operator==(const BigNumber& a, const int& b) {
-    // TODO: optimize pater
-    return a == BigNumber(b);
-};
-
-bool operator>(const BigNumber& a, const int& b) {
-    // TODO: optimize pater
-    return a > BigNumber(b);
-};
-
-bool operator>=(const BigNumber& a, const int& b) {
-    // TODO: optimize pater
-    return a >= BigNumber(b);
-};
-
-bool operator<(const BigNumber& a, const int& b) {
-    // TODO: optimize pater
-    return a < BigNumber(b);
-};
-
-bool operator<=(const BigNumber& a, const int& b) {
-    // TODO: optimize pater
-    return a <= BigNumber(b);
-};
-
-bool operator!=(const BigNumber& a, const int& b) {
-    // TODO: optimize pater
-    return a != BigNumber(b);
-};
-
 BigNumber& BigNumber::operator=(const BigNumber& a) {
     payload = a.payload;
     sign = a.sign;
@@ -298,41 +266,6 @@ std::string BigNumber::debug() const {
 }
 
 // private
-// compare operators
-int BigNumber::compare(const BigNumber& a, const BigNumber& b) {
-    // a > b: -1
-    // a < b: 1
-    // a = b: 0
-    BigNumber tempA = a, tempB = b;
-    //while (*tempA.payload.end() == 0) tempA.payload.pop_back();
-    //while (*tempB.payload.end() == 0) tempB.payload.pop_back();
-    if (tempA.pointPosition != tempB.pointPosition) {
-        std::string redundantMultiplier (std::abs(tempA.pointPosition - tempB.pointPosition), '0');
-        redundantMultiplier.insert (0, 1, '1');
-        if (tempA.pointPosition < tempB.pointPosition) {
-            tempA = BigNumber::mul(tempA, BigNumber(redundantMultiplier), false);
-            tempA.pointPosition = b.pointPosition;
-        }
-        else {
-            tempB = BigNumber::mul(tempB, BigNumber(redundantMultiplier), false);
-            tempB.pointPosition = tempA.pointPosition;
-        }
-    }
-    if (tempA.payload.size() < tempB.payload.size()) {
-        while (tempA.payload.size() < tempB.payload.size()) tempA.payload.push_back(0);
-    }
-    if (tempA.payload.size() > tempB.payload.size()) {
-        while (tempA.payload.size() > tempB.payload.size()) tempB.payload.push_back(0);
-    }
-    //std::cout << tempA.debug() << " " << tempB.debug() << std::endl;
-    if ((tempA.sign == 1 && tempB.sign == 0) || tempA.payload.size() < tempB.payload.size()) return 1;
-    if ((tempA.sign == 0 && tempB.sign == 1) || tempA.payload.size() > tempB.payload.size()) return -1;
-    for (int i = tempA.payload.size() - 1; i >= 0; i--) {
-        if (tempA.payload[i] < tempB.payload[i]) return tempA.sign ? -1 : 1;
-        if (tempA.payload[i] > tempB.payload[i]) return tempA.sign ? 1 : -1;
-    }
-    return 0;
-}
 
 BigNumber BigNumber::abs() const {
     return BigNumber(payload, false, pointPosition);
@@ -353,13 +286,11 @@ size_t BigNumber::digitLen() {
 BigNumber BigNumber::removeZeros() {
     if (this->isZero()) return BigNumber(0);
     if (pointPosition == 0) return *this;
-    //std::cout << *this << " -> ";
     std::string rawString = BigNumber::toString(*this);
     size_t lastCharIndex = rawString.length() - 1;
     while ((rawString[lastCharIndex] == '0' && (rawString.length() - lastCharIndex) < pointPosition)) {
         lastCharIndex--;
     }
-    //rawString = rawString.substr(0, lastCharIndex - (rawString[lastCharIndex] == '.' ? 0 : 1));
     rawString = rawString.substr(0, lastCharIndex + (rawString[lastCharIndex] == '0' ? -1 : 1));
 
     return BigNumber(rawString);
@@ -369,66 +300,8 @@ bool BigNumber::isZero() const {
     return payload.size() == 1 && payload[0] == 0;
 }
 
-BigNumber BigNumber::shift(size_t numberOfZeros) {
-    // TODO: shift implementation
-}
-
-BigNumber pow(BigNumber a, size_t n) {
-    BigNumber result = BigNumber(1);
-    for (int i = 0; i < n; i++) {
-        result *= a;
-    }
-    return result;
-}
-
-BigNumber BigNumber::countPi(int accuracy) {
-    BigNumber result = BigNumber(0);
-    BigNumber kFactorialInPowerOf3 = BigNumber(1);
-    BigNumber k3Factorial = BigNumber(1);
-    BigNumber k6Factorial = BigNumber(1);
-
-    BigNumber MAGIC_NUMBER_ONE = "13591409"_bign;
-    BigNumber MAGIC_NUMBER_TWO = "545140134"_bign;
-    BigNumber MAGIC_NUMBER_THREE = "640320"_bign;
-    std::string MAGIC_NUMBER_FOUR_RAW = "512384047.99600074981255466992791529927985060803010899361005608614623126188949113059562159893746802321614884";
-    BigNumber MAGIC_NUMBER_FOUR = BigNumber(
-            MAGIC_NUMBER_FOUR_RAW.substr(0,
-                    std::max(12, std::min(accuracy + 12, static_cast<int>(MAGIC_NUMBER_FOUR_RAW.length())))));
-
-    std::cout << MAGIC_NUMBER_FOUR << std::endl;
-    for (int k = 0; k < std::max(10, accuracy / 10); k++) {
-        if (k != 0) {
-            kFactorialInPowerOf3 *= BigNumber(k * k * k);
-            for (int j = 0; j < 6; j++) {
-                k6Factorial *= BigNumber(k * 6 - j);
-            }
-            for (int j = 0; j < 3; j++) {
-                k3Factorial *= BigNumber(k * 3 - j);
-            }
-        }
-        BigNumber mult = BigNumber(
-                k6Factorial * (MAGIC_NUMBER_ONE + MAGIC_NUMBER_TWO * BigNumber(k)) /
-                        ((k3Factorial) * kFactorialInPowerOf3 * pow(MAGIC_NUMBER_THREE, 3 * k) * MAGIC_NUMBER_FOUR)
-                );
-        mult.sign = (k & 1);
-
-        result += mult;
-    }
-    result = result * "12"_bign;
-    result = BigNumber(BigNumber::toString(result).substr(0, accuracy + 5));
-    result = BigNumber::div("1"_bign, result, false, accuracy * 10);
-    std::cout << result << std::endl;
-
-    return BigNumber(BigNumber::toString(result).substr(0, accuracy + 2));
-}
-
 void BigNumber::swap(BigNumber &a, BigNumber &b) {
     std::swap(a.payload, b.payload);
     std::swap(a.sign, b.sign);
     std::swap(a.pointPosition, b.pointPosition);
 }
-
-//TODO: everything else
-
-// 3.14159265358979323846264338327950288419716939937510582097494459224665444819062093191251594825331239568011887314270421803323335083126
-// 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214

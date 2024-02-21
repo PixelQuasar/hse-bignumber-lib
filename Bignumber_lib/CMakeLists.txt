@@ -11,6 +11,8 @@ set(SOURCE_FILES
         BigNumber/arithmetics/sub.cpp
         BigNumber/arithmetics/mul.cpp
         BigNumber/arithmetics/div.cpp
+        BigNumber/countPi.cpp
+        BigNumber/compare.cpp
 )
 
 add_library(Bignumber_lib STATIC ${SOURCE_FILES} ${HEADER_FILES})
