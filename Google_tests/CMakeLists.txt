@@ -7,6 +7,7 @@ add_executable(Google_Tests_run
         otherTests.cpp
         constructorTests.cpp
         comparisonTests.cpp
+        assignmentTests.cpp
 )
 
 target_link_libraries(Google_Tests_run Bignumber_lib)

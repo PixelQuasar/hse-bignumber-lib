@@ -27,12 +27,6 @@ BigNumber::BigNumber(int x) {
     *this = fromString;
 }
 
-// constructor with float
-BigNumber::BigNumber(float x) {
-    BigNumber fromString = BigNumber(std::to_string(x));
-    *this = fromString;
-}
-
 // constructor with double
 BigNumber::BigNumber(double x) {
     BigNumber fromString = BigNumber(std::to_string(x));
@@ -40,7 +34,7 @@ BigNumber::BigNumber(double x) {
 }
 
 // constructor with long long
-BigNumber::BigNumber(long long x) {
+BigNumber::BigNumber(long x) {
     BigNumber fromString = BigNumber(std::to_string(x));
     *this = fromString;
 }

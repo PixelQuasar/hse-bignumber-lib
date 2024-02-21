@@ -22,8 +22,7 @@ class BigNumber {
 
         explicit BigNumber(int x);
         explicit BigNumber(double x);
-        explicit BigNumber(float x);
-        explicit BigNumber(long long x);
+        explicit BigNumber(long x);
         explicit BigNumber(std::string x);
         BigNumber(BigNumber& x);
         BigNumber(const BigNumber& x);
