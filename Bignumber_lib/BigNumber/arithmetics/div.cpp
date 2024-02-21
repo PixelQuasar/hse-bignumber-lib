@@ -12,7 +12,7 @@ BigNumber powerOfTen(int n) {
 }
 
 BigNumber BigNumber::div(const BigNumber a, const BigNumber b, bool reduceZeros, size_t precision) {
-    //std::cout << a << " / " << b << " = ";
+    //std::cout << a << " " << b << std::endl;
     if (b == 1)  {
         return a;
     }
@@ -20,11 +20,14 @@ BigNumber BigNumber::div(const BigNumber a, const BigNumber b, bool reduceZeros,
         return -a;
     }
 
-
     BigNumber currentPrecision = BigNumber();
 
     BigNumber numberA = a * powerOfTen(a.pointPosition + precision);
+    //for (int i = 0; i < precision; i++) numberA.payload.insert(numberA.payload.begin(), 0);
+
     BigNumber numberB = b * powerOfTen(b.pointPosition);
+
+    //std::cout << precision << std::endl << numberA << std::endl << numberB << std::endl;
 
     BigNumber low = BigNumber(0);
     BigNumber high = numberA.abs();
@@ -33,17 +36,12 @@ BigNumber BigNumber::div(const BigNumber a, const BigNumber b, bool reduceZeros,
     BigNumber quotient = BigNumber(0);
 
     size_t limitIndex = 0;
-    while (low < high) {
-        //std::cout << "DIFF: " << high << " - " << low << " = " << high - low << std::endl;
+    while (low <= high && limitIndex < 500) {
         mid = low + (high - low) * "0.5"_bign;
         if (mid.pointPosition == 1) mid -= "0.5"_bign;
 
-//        std::cout << "LOW: " << low << std::endl;
-//        std::cout << "MID: " << mid << std::endl;
-//        std::cout << "TOP: " << high << std::endl << std::endl;
 
-
-        //std::cout << mid << std::endl;
+        //std::cout << "MID: " << BigNumber::toString(mid).substr(0, 100) << std::endl;
         BigNumber attempt = mid * numberB;
         if (attempt.abs() == numberA.abs()) {
             quotient = mid;
@@ -58,7 +56,8 @@ BigNumber BigNumber::div(const BigNumber a, const BigNumber b, bool reduceZeros,
         limitIndex += 0;
     }
 
-    quotient.pointPosition = a.pointPosition + b.pointPosition + precision;
+    //std::cout << "TEMPRES: " << quotient  << std::endl;
+    quotient.pointPosition = a.pointPosition - b.pointPosition + precision;
     if ((a < 0 && b < 0 || a > 0 && b > 0)) {
         //std::cout << "I AM DIVISION RESULT! " << quotient << std::endl;
         return quotient;

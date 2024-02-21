@@ -21,7 +21,9 @@ BigNumber BigNumber::sub(const BigNumber a, const BigNumber b, bool reduceZeros)
     }
 
     if (a > b) result.sign = false;
-    else if (a < b) return -sub(b, a);
+    else if (a < b) {
+        return -sub(b, a);
+    }
     else {
         result.payload.push_back(0);
         result.sign = false;

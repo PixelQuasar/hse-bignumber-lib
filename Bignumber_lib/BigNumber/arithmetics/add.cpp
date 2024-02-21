@@ -37,6 +37,8 @@ BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros)
     if (termA.payload.size() > termB.payload.size()) {
         while (termA.payload.size() > termB.payload.size()) termB.payload.push_back(0);
     }
+    termA.payload.push_back(0);
+    termB.payload.push_back(0);
 
     //std::cout << termA << " " << termB << std::endl;
 
@@ -52,6 +54,10 @@ BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros)
     }
 
     if (termA.sign) result.sign = true;
+
+    while (result.payload.size() > 1 && result.payload.back() == 0) {
+        result.payload.pop_back();
+    }
 
     //std::cout << result << std::endl;
     return reduceZeros ? result.removeZeros() : result;

@@ -2,6 +2,7 @@
 // Created by QUASARITY on 27.01.2024.
 //
 #include <iostream>
+#include <chrono>
 #include "BigNumber.h"
 
 int main() {
@@ -10,19 +11,30 @@ int main() {
 //    std::cout << a / b << std::endl;
     //std::cout << "600000"_bign - "3000"_bign << std::endl;
 
-    //std::cout << BigNumber("0.076171875") - BigNumber("0.27734375") << std::endl;
-    std::cout << BigNumber::countPi(10) << std::endl;
+//    std::cout << (BigNumber::div(
+//    BigNumber("1"),
+//    BigNumber("0.31830988618379067153776752674502872406891759116361898279897755762296472268498260131542292654820140462639666740182678026494756495477012877181109084712983560087950259086701451438558226419254141526266650987039344"),
+//    false, 1000)) << std::endl;
+    //std::cout << "1"_bign / "0.3183098861837911373460803921473266286049957980270750250950776289072593910943783612963555695946895744"_bign;
+
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+    BigNumber::countPi(10);
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "REAL: " << "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214" << std::endl;
+
+    std::cout << "Time difference (sec) = " <<  (std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count()) /1000000.0  <<std::endl;
     //std::cout << "600000000000000"_bign / "3"_bign << std::endl;
 ////
 
-//    BigNumber k = BigNumber(0);
+    //BigNumber k = BigNumber(2);
 //    BigNumber mult = "4"_bign / ("8"_bign * k + "1"_bign)
 //    - "2"_bign / ("8"_bign * k + "4"_bign)
 //    - "1"_bign / ("8"_bign * k + "5"_bign)
 //    - "1"_bign / ("8"_bign * k + "6"_bign)
 //    ;
-    // 4 / 1 - 2 / 4 - 1 / 5 - 1/ 6
-    //std::cout << ("11212.0000000"_bign).removeZeros() << std::endl;
+    //std::cout << "1"_bign / "10"_bign << std::endl;
+    //std::cout << mult << std::endl;
     //std::cout << ("12121.00012120000"_bign).removeZeros() << std::endl;
     //std::cout << "2"_bign / "4"_bign << std::endl;
     //std::cout << ("1"_bign / ("8"_bign * k + "5"_bign)).debug() << std::endl;

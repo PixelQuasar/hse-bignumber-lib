@@ -104,7 +104,6 @@ BigNumber::~BigNumber() {
 // utils
 std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
     std::string result;
-    if (bigNumber.sign) result += "-";
     //std::cout << bigNumber.debug() << std::endl;
     result += std::to_string(bigNumber.payload.back());
     for (int i = bigNumber.payload.size() - 2; i >= 0; i--) {
@@ -117,6 +116,7 @@ std::string BigNumber::toString(const BigNumber &bigNumber, bool point) {
         //std::cout << "RESULT: " <<  result << std::endl;
         result.insert(result.length() - bigNumber.pointPosition, 1, '.');
     }
+    if (bigNumber.sign) result.insert(0, 1, '-');
     return result;
 }
 
@@ -151,7 +151,7 @@ BigNumber operator-(const BigNumber& x) {
     BigNumber result;
     result.payload = x.payload;
     result.sign = !x.sign || x == BigNumber(0);
-    result.payload = x.payload;
+    result.pointPosition = x.pointPosition;
     return result;
 }
 
@@ -383,16 +383,49 @@ BigNumber pow(BigNumber a, size_t n) {
 
 BigNumber BigNumber::countPi(int accuracy) {
     BigNumber result = BigNumber(0);
-    for (int i = 0; i < 1000; i++) {
-        BigNumber k = BigNumber(i);
-        BigNumber mult =
-                "4"_bign / ("8"_bign * k + "1"_bign) -
-                "2"_bign / ("8"_bign * k + "4"_bign) -
-                "1"_bign / ("8"_bign * k + "5"_bign) -
-                "1"_bign / ("8"_bign * k + "6"_bign);
-        //std::cout << mult << std::endl;
-        result += pow(BigNumber("0.0625"), i) * mult;
+    BigNumber kFactorialInPowerOf3 = BigNumber(1);
+    BigNumber k3Factorial = BigNumber(1);
+    BigNumber k6Factorial = BigNumber(1);
+
+    BigNumber rootTerm = BigNumber("512384047.99600074981255466992791529927985060803010899361005608614623126188949113059562159893746802321614884");
+    for (int k = 0; k < 10; k++) {
+        if (k != 0) {
+            kFactorialInPowerOf3 *= BigNumber(k * k * k);
+            for (int j = 0; j < 6; j++) {
+                k6Factorial *= BigNumber(k * 6 - j);
+            }
+            for (int j = 0; j < 3; j++) {
+                k3Factorial *= BigNumber(k * 3 - j);
+            }
+        }
+        //std::cout << kFactorialInPowerOf3 << std::endl << k3Factorial << std::endl << k6Factorial << std::endl;
+        BigNumber mult = BigNumber(
+                k6Factorial * ("13591409"_bign + "545140134"_bign * BigNumber(k)) /
+                        ((k3Factorial) * kFactorialInPowerOf3 * pow("640320"_bign, 3 * k) * rootTerm)
+                );
+        mult.sign = (k & 1);
+        //std::cout << "A: " << k6Factorial * ("13591409"_bign + "545140134"_bign * BigNumber(k)) << std::endl;
+        //std::cout << "B: " << (k3Factorial) * kFactorialInPowerOf3 * pow("640320"_bign, 3 * k) * "512384047.996"_bign << std::endl;
+        //std::cout << "MULT: " << mult << std::endl;
+
+        result += mult;
+        //std::cout << result << std::endl;
+
+        //std::cout << std::endl;
+//        BigNumber k = BigNumber(i);
+//        BigNumber mult =
+//                "4"_bign / ("8"_bign * k + "1"_bign) -
+//                "2"_bign / ("8"_bign * k + "4"_bign) -
+//                "1"_bign / ("8"_bign * k + "5"_bign) -
+//                "1"_bign / ("8"_bign * k + "6"_bign);
+//        //std::cout << mult << std::endl;
+//        result += pow(BigNumber("0.0625"), i) * mult;
     }
+    //std::cout << result << std::endl;
+    result = result * "12"_bign;
+    std::cout << result << std::endl;
+    result = BigNumber::div("1"_bign, result, false, 500);
+    std::cout << "TEST: " << BigNumber::toString(result).substr(0, 106) << std::endl;
     return result;
 }
 
@@ -404,5 +437,5 @@ void BigNumber::swap(BigNumber &a, BigNumber &b) {
 
 //TODO: everything else
 
-// 3.1415926703169603732668632513970299187414938680987981497967518568250856365294888410842
-// 3,14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214
+// 3.14159265358979323846264338327950288419716939937510582097494459224665444819062093191251594825331239568011887314270421803323335083126
+// 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214
