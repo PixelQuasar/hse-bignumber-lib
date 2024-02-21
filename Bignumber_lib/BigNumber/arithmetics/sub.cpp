@@ -79,6 +79,7 @@ BigNumber BigNumber::sub(const BigNumber a, const BigNumber b, bool reduceZeros)
         result.payload.pop_back();
     }
     //std::cout << "SUBRES: " << result << std::endl;
+    //std::cout << result << std::endl;
     return reduceZeros ? result.removeZeros() : result;
 
 //    for (int i = 0; i < termA.payload.size(); i++) {

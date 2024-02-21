@@ -10,7 +10,7 @@
 class BigNumber {
         static const int base = 1e9;
         static const int baseLen = 9;
-        static const int divisionAccuracy = baseLen * 2;
+        static const int _precision = 8;
 
         int pointPosition;
         bool sign;
@@ -82,7 +82,7 @@ class BigNumber {
         static BigNumber add(const BigNumber a, const BigNumber b, bool reduceZeros = true);
         static BigNumber sub(const BigNumber a, const BigNumber b, bool reduceZeros = true);
         static BigNumber mul(const BigNumber a, const BigNumber b, bool reduceZeros = true);
-        static BigNumber div(const BigNumber a, const BigNumber b, bool reduceZeros = true);
+        static BigNumber div(const BigNumber a, const BigNumber b, bool reduceZeros = true, size_t precision = _precision);
 
         BigNumber increment();
         BigNumber decrement();

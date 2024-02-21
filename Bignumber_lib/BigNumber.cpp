@@ -353,12 +353,15 @@ size_t BigNumber::digitLen() {
 BigNumber BigNumber::removeZeros() {
     if (this->isZero()) return BigNumber(0);
     if (pointPosition == 0) return *this;
+    //std::cout << *this << " -> ";
     std::string rawString = BigNumber::toString(*this);
     size_t lastCharIndex = rawString.length() - 1;
     while ((rawString[lastCharIndex] == '0' && (rawString.length() - lastCharIndex) < pointPosition)) {
         lastCharIndex--;
     }
-    rawString = rawString.substr(0, lastCharIndex - (rawString[lastCharIndex] == '.' ? 0 : 1));
+    //rawString = rawString.substr(0, lastCharIndex - (rawString[lastCharIndex] == '.' ? 0 : 1));
+    rawString = rawString.substr(0, lastCharIndex + (rawString[lastCharIndex] == '0' ? -1 : 1));
+
     return BigNumber(rawString);
 }
 
@@ -380,7 +383,7 @@ BigNumber pow(BigNumber a, size_t n) {
 
 BigNumber BigNumber::countPi(int accuracy) {
     BigNumber result = BigNumber(0);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1000; i++) {
         BigNumber k = BigNumber(i);
         BigNumber mult =
                 "4"_bign / ("8"_bign * k + "1"_bign) -
@@ -401,5 +404,5 @@ void BigNumber::swap(BigNumber &a, BigNumber &b) {
 
 //TODO: everything else
 
-// 3.1429338365056205817902644453098570892681561706235397406390117582497163894322523552343666204815021564746569316034545821878892978389944908891584507415473126457072794437408447265625
-// 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
+// 3.1415926703169603732668632513970299187414938680987981497967518568250856365294888410842
+// 3,14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214

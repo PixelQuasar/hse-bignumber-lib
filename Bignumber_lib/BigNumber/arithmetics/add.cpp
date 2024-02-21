@@ -44,7 +44,7 @@ BigNumber BigNumber::add(const BigNumber a, const BigNumber b, bool reduceZeros)
     for (size_t i = 0; i < std::max(termA.payload.size(), termB.payload.size()); i++) {
         uint32_t chunkSum = termA.payload[i] + termB.payload[i] + carry;
         carry = 0;
-        if (chunkSum > BigNumber::base) {
+        if (chunkSum >= BigNumber::base) {
             chunkSum -= BigNumber::base;
             carry = 1;
         }
