@@ -28,7 +28,7 @@ BigNumber BigNumber::countPi(int accuracy) {
             MAGIC_NUMBER_FOUR_RAW.substr(0,
                                          std::max(12, std::min(accuracy + 12, static_cast<int>(MAGIC_NUMBER_FOUR_RAW.length())))));
 
-    for (int k = 0; k < std::min(8, accuracy / 10 - 2); k++) {
+    for (int k = 0; k < std::max(8, accuracy / 10 - 2); k++) {
         if (k != 0) {
             kFactorialInPowerOf3 *= BigNumber(k * k * k);
             for (int j = 0; j < 6; j++) {
