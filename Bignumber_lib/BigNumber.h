@@ -6,6 +6,7 @@
 #define DEMO_LIB_BIGNUMBER_H
 
 #include <vector>
+#include <iostream>
 
 class BigNumber {
     public:
